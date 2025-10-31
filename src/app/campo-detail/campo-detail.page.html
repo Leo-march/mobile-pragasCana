@@ -1,13 +1,101 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>campo-detail</ion-title>
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ campo?.nome || 'Campo' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="novaArmadilha()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">campo-detail</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="campo-detail-content">
+  <div class="campo-detail-container" *ngIf="campo">
+    
+    <!-- Informações do Campo -->
+    <ion-card class="info-card">
+      <ion-card-content>
+        <div class="info-header">
+          <div>
+            <h2>{{ campo.nome }}</h2>
+            <p *ngIf="campo.localizacao">
+              <ion-icon name="location"></ion-icon>
+              {{ campo.localizacao }}
+            </p>
+          </div>
+          <div class="stats-badge">
+            <span class="numero">{{ campo.armadilhas.length }}</span>
+            <span class="label">armadilhas</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Mensagem quando não há armadilhas -->
+    <div *ngIf="campo.armadilhas.length === 0" class="empty-state">
+      <ion-icon name="flag-outline"></ion-icon>
+      <h3>Nenhuma armadilha cadastrada</h3>
+      <p>Adicione armadilhas para começar o monitoramento</p>
+      <ion-button expand="block" (click)="novaArmadilha()">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Adicionar Armadilha
+      </ion-button>
+    </div>
+
+    <!-- Lista de Armadilhas -->
+    <div *ngIf="campo.armadilhas.length > 0" class="armadilhas-grid">
+      <ion-card 
+        *ngFor="let armadilha of campo.armadilhas" 
+        class="armadilha-card"
+        [class.com-foto]="armadilha.foto">
+        
+        <!-- Área da Foto -->
+        <div class="foto-area" (click)="armadilha.foto ? visualizarFoto(armadilha) : tirarFoto(armadilha)">
+          <img *ngIf="armadilha.foto" [src]="armadilha.foto" [alt]="armadilha.nome" />
+          <div *ngIf="!armadilha.foto" class="sem-foto">
+            <ion-icon name="camera"></ion-icon>
+            <span>Tirar Foto</span>
+          </div>
+        </div>
+
+        <!-- Informações -->
+        <ion-card-content>
+          <div class="armadilha-header">
+            <h3>{{ armadilha.nome }}</h3>
+            <div class="actions">
+              <ion-button fill="clear" size="small" (click)="editarArmadilha(armadilha)">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" size="small" color="danger" (click)="deletarArmadilha(armadilha)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <p *ngIf="armadilha.observacoes" class="observacoes">
+            {{ armadilha.observacoes }}
+          </p>
+
+          <div *ngIf="armadilha.dataFoto" class="data-foto">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>{{ armadilha.dataFoto | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+
+          <ion-button 
+            expand="block" 
+            [color]="armadilha.foto ? 'success' : 'primary'"
+            (click)="tirarFoto(armadilha)">
+            <ion-icon [name]="armadilha.foto ? 'camera' : 'camera-outline'" slot="start"></ion-icon>
+            {{ armadilha.foto ? 'Atualizar Foto' : 'Tirar Foto' }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
 </ion-content>

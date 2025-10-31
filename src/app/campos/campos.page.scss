@@ -1,0 +1,156 @@
+.campos-content {
+  --background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+}
+
+.campos-container {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+// Empty State
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  ion-icon {
+    font-size: 120px;
+    color: #43a047;
+    opacity: 0.3;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    color: #2e7d32;
+    margin: 0 0 10px 0;
+    font-size: 24px;
+  }
+
+  p {
+    color: #666;
+    margin: 0 0 30px 0;
+    font-size: 16px;
+  }
+
+  ion-button {
+    --background: #43a047;
+    margin-top: 10px;
+  }
+}
+
+// Lista de Campos
+.campos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.campo-card {
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(67, 160, 71, 0.3);
+  }
+
+  ion-card-content {
+    padding: 16px;
+  }
+
+  .campo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+
+    .campo-info {
+      flex: 1;
+
+      h2 {
+        margin: 0 0 8px 0;
+        color: #2e7d32;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        ion-icon {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .campo-actions {
+      display: flex;
+      gap: 4px;
+
+      ion-button {
+        --padding-start: 8px;
+        --padding-end: 8px;
+        margin: 0;
+
+        ion-icon {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .campo-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 12px;
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #666;
+      font-size: 14px;
+
+      ion-icon {
+        color: #43a047;
+        font-size: 18px;
+      }
+    }
+  }
+
+  ion-progress-bar {
+    margin: 12px 0 6px 0;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .progresso-texto {
+    margin: 0;
+    text-align: right;
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 480px) {
+  .campo-card .campo-header {
+    flex-direction: column;
+    gap: 12px;
+
+    .campo-actions {
+      align-self: flex-end;
+    }
+  }
+}

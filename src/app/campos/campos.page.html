@@ -1,13 +1,76 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>campos</ion-title>
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="voltarParaDashboard()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Meus Campos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="novoCampo()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">campos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="campos-content">
+  <div class="campos-container">
+    
+    <!-- Mensagem quando não há campos -->
+    <div *ngIf="campos.length === 0" class="empty-state">
+      <ion-icon name="map-outline"></ion-icon>
+      <h2>Nenhum campo cadastrado</h2>
+      <p>Comece criando seu primeiro campo!</p>
+      <ion-button expand="block" (click)="novoCampo()">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Criar Primeiro Campo
+      </ion-button>
+    </div>
+
+    <!-- Lista de campos -->
+    <div *ngIf="campos.length > 0" class="campos-list">
+      <ion-card *ngFor="let campo of campos" class="campo-card" (click)="abrirCampo(campo)">
+        <ion-card-content>
+          <div class="campo-header">
+            <div class="campo-info">
+              <h2>{{ campo.nome }}</h2>
+              <p *ngIf="campo.localizacao">
+                <ion-icon name="location-outline"></ion-icon>
+                {{ campo.localizacao }}
+              </p>
+            </div>
+            <div class="campo-actions" (click)="$event.stopPropagation()">
+              <ion-button fill="clear" (click)="editarCampo(campo)">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" color="danger" (click)="deletarCampo(campo)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <div class="campo-stats">
+            <div class="stat-item">
+              <ion-icon name="flag-outline"></ion-icon>
+              <span>{{ campo.armadilhas.length }} armadilhas</span>
+            </div>
+            <div class="stat-item">
+              <ion-icon name="camera-outline"></ion-icon>
+              <span>{{ contarFotos(campo) }} fotos</span>
+            </div>
+          </div>
+
+          <ion-progress-bar 
+            [value]="calcularProgresso(campo)" 
+            [color]="calcularProgresso(campo) === 1 ? 'success' : 'warning'">
+          </ion-progress-bar>
+          <p class="progresso-texto">
+            {{ (calcularProgresso(campo) * 100).toFixed(0) }}% completo
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
 </ion-content>
