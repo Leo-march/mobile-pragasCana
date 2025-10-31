@@ -12,6 +12,10 @@ const routes: Routes = [
     loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule)
   },
   {
+    path: 'campos',
+    loadChildren: () => import('./campos/campos.module').then( m => m.CamposPageModule)
+  },
+  {
     path: 'campo-detail',
     loadChildren: () => import('./campo-detail/campo-detail.module').then( m => m.CampoDetailPageModule)
   },

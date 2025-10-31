@@ -45,6 +45,7 @@
   border-left: 4px solid #43a047;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-4px);
@@ -112,85 +113,37 @@
     }
   }
 
-  .activity-chart {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
-    height: 150px;
-    padding: 20px 0;
-    gap: 8px;
+  ion-button {
+    margin-top: 8px;
+    height: 44px;
 
-    .bar {
-      flex: 1;
-      background: linear-gradient(to top, #43a047, #66bb6a);
-      border-radius: 4px 4px 0 0;
-      min-height: 20px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-
-      &:hover {
-        background: linear-gradient(to top, #2e7d32, #43a047);
-        transform: scaleY(1.05);
-      }
+    &.mt-8 {
+      margin-top: 12px;
     }
-  }
-
-  .chart-labels {
-    display: flex;
-    justify-content: space-around;
-    padding: 0 10px;
-    font-size: 12px;
-    color: #666;
-    font-weight: 500;
   }
 }
 
-// Tasks Card
-.tasks-card {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+// Info Card
+.info-card {
+  background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
   margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  ion-card-header {
-    border-bottom: 1px solid #e0e0e0;
+  ion-card-content {
+    padding: 20px;
 
-    ion-card-title {
-      color: #2e7d32;
-      font-weight: 600;
+    h3 {
+      margin: 0 0 12px 0;
+      color: #f57f17;
       font-size: 18px;
-    }
-  }
-
-  ion-list {
-    background: transparent;
-  }
-
-  ion-item {
-    --background: transparent;
-    --padding-start: 0;
-
-    ion-checkbox {
-      --border-color: #43a047;
-      --checkbox-background-checked: #43a047;
-      margin-right: 12px;
+      font-weight: 600;
     }
 
-    ion-label {
-      h3 {
-        color: #333;
-        font-weight: 500;
-        font-size: 14px;
-        margin-bottom: 4px;
-      }
-
-      p {
-        color: #666;
-        font-size: 12px;
-      }
-    }
-
-    &:hover {
-      --background: rgba(67, 160, 71, 0.05);
+    p {
+      margin: 0;
+      color: #666;
+      line-height: 1.5;
+      font-size: 14px;
     }
   }
 }
@@ -217,5 +170,9 @@
 
   .stat-card ion-card-content h3 {
     font-size: 20px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,4 +1,3 @@
-
 <ion-content [fullscreen]="true" class="dashboard-content">
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -17,50 +16,60 @@
 
     <!-- Cards de Estatísticas -->
     <div class="stats-grid">
-      <ion-card class="stat-card">
+      <ion-card class="stat-card" (click)="navegarParaCampos()">
         <ion-card-content>
-          <ion-icon name="people" class="stat-icon"></ion-icon>
-          <h3>19 fotos</h3>
-          <p>Faltando</p>
-          <span class="trend negative">Até as 19hrs</span>
+          <ion-icon name="camera-outline" class="stat-icon"></ion-icon>
+          <h3>{{ fotosFaltando }}</h3>
+          <p>Fotos Faltando</p>
+          <span class="trend" [class.negative]="fotosFaltando > 0" [class.positive]="fotosFaltando === 0">
+            {{ fotosFaltando === 0 ? 'Completo!' : 'Pendente' }}
+          </span>
         </ion-card-content>
       </ion-card>
 
-      <ion-card class="stat-card">
+      <ion-card class="stat-card" (click)="navegarParaCampos()">
         <ion-card-content>
           <ion-icon name="trending-up" class="stat-icon"></ion-icon>
-          <h3>94.5%</h3>
-          <p>Taxa de Conversão</p>
-          <span class="trend positive">+5%</span>
+          <h3>{{ taxaConclusao.toFixed(1) }}%</h3>
+          <p>Taxa de Conclusão</p>
+          <span class="trend positive">{{ totalArmadilhas }} armadilhas</span>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="stat-card" (click)="navegarParaCampos()">
+        <ion-card-content>
+          <ion-icon name="map-outline" class="stat-icon"></ion-icon>
+          <h3>{{ totalCampos }}</h3>
+          <p>Campos Cadastrados</p>
+          <span class="trend positive">Ativos</span>
         </ion-card-content>
       </ion-card>
     </div>
 
-    <!-- Gráfico de Atividades -->
+    <!-- Ações Rápidas -->
     <ion-card class="activity-card">
       <ion-card-header>
-        <ion-card-title>Atividades Recentes</ion-card-title>
+        <ion-card-title>Ações Rápidas</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <div class="activity-chart">
-          <div class="bar" style="height: 60%"></div>
-          <div class="bar" style="height: 80%"></div>
-          <div class="bar" style="height: 45%"></div>
-          <div class="bar" style="height: 90%"></div>
-          <div class="bar" style="height: 70%"></div>
-          <div class="bar" style="height: 55%"></div>
-          <div class="bar" style="height: 85%"></div>
-        </div>
-        <div class="chart-labels">
-          <span>Seg</span>
-          <span>Ter</span>
-          <span>Qua</span>
-          <span>Qui</span>
-          <span>Sex</span>
-          <span>Sáb</span>
-          <span>Dom</span>
-        </div>
+        <ion-button expand="block" color="success" (click)="navegarParaCampos()">
+          <ion-icon name="map" slot="start"></ion-icon>
+          Ver Meus Campos
+        </ion-button>
+        <ion-button expand="block" color="primary" (click)="navegarParaCampos()" class="mt-8">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Adicionar Novo Campo
+        </ion-button>
       </ion-card-content>
     </ion-card>
 
-  
+    <!-- Informações -->
+    <ion-card class="info-card">
+      <ion-card-content>
+        <h3>💡 Dica</h3>
+        <p>Organize suas armadilhas por campo e mantenha o registro fotográfico atualizado para um monitoramento eficiente!</p>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>
