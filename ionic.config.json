@@ -1,5 +1,7 @@
 {
   "name": "mobile-pragasCana",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
