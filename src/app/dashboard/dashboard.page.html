@@ -1,13 +1,66 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>dashboard</ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="dashboard-content">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">dashboard</ion-title>
+      <ion-title size="large">Dashboard</ion-title>
     </ion-toolbar>
   </ion-header>
-</ion-content>
+
+  <div class="dashboard-container">
+    <!-- Bem-vindo -->
+    <ion-card class="welcome-card">
+      <ion-card-content>
+        <h2>Bem-vindo de volta! 👋</h2>
+        <p>Aqui está o resumo de hoje</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Cards de Estatísticas -->
+    <div class="stats-grid">
+      <ion-card class="stat-card">
+        <ion-card-content>
+          <ion-icon name="people" class="stat-icon"></ion-icon>
+          <h3>19 fotos</h3>
+          <p>Faltando</p>
+          <span class="trend negative">Até as 19hrs</span>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="stat-card">
+        <ion-card-content>
+          <ion-icon name="trending-up" class="stat-icon"></ion-icon>
+          <h3>94.5%</h3>
+          <p>Taxa de Conversão</p>
+          <span class="trend positive">+5%</span>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Gráfico de Atividades -->
+    <ion-card class="activity-card">
+      <ion-card-header>
+        <ion-card-title>Atividades Recentes</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="activity-chart">
+          <div class="bar" style="height: 60%"></div>
+          <div class="bar" style="height: 80%"></div>
+          <div class="bar" style="height: 45%"></div>
+          <div class="bar" style="height: 90%"></div>
+          <div class="bar" style="height: 70%"></div>
+          <div class="bar" style="height: 55%"></div>
+          <div class="bar" style="height: 85%"></div>
+        </div>
+        <div class="chart-labels">
+          <span>Seg</span>
+          <span>Ter</span>
+          <span>Qua</span>
+          <span>Qui</span>
+          <span>Sex</span>
+          <span>Sáb</span>
+          <span>Dom</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  

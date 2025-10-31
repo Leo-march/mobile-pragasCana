@@ -1,0 +1,221 @@
+.dashboard-content {
+  --background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+}
+
+.dashboard-container {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Welcome Card
+.welcome-card {
+  background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
+  color: white;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+
+  ion-card-content {
+    padding: 24px;
+
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+  }
+}
+
+// Stats Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: white;
+  border-left: 4px solid #43a047;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(67, 160, 71, 0.3);
+  }
+
+  ion-card-content {
+    padding: 16px;
+    text-align: center;
+    position: relative;
+
+    .stat-icon {
+      font-size: 32px;
+      color: #43a047;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      margin: 8px 0 4px 0;
+      font-size: 24px;
+      font-weight: 700;
+      color: #2e7d32;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .trend {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 12px;
+
+      &.positive {
+        background: #c8e6c9;
+        color: #2e7d32;
+      }
+
+      &.negative {
+        background: #ffcdd2;
+        color: #c62828;
+      }
+    }
+  }
+}
+
+// Activity Card
+.activity-card {
+  background: white;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  ion-card-header {
+    border-bottom: 1px solid #e0e0e0;
+
+    ion-card-title {
+      color: #2e7d32;
+      font-weight: 600;
+      font-size: 18px;
+    }
+  }
+
+  .activity-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 150px;
+    padding: 20px 0;
+    gap: 8px;
+
+    .bar {
+      flex: 1;
+      background: linear-gradient(to top, #43a047, #66bb6a);
+      border-radius: 4px 4px 0 0;
+      min-height: 20px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: linear-gradient(to top, #2e7d32, #43a047);
+        transform: scaleY(1.05);
+      }
+    }
+  }
+
+  .chart-labels {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+  }
+}
+
+// Tasks Card
+.tasks-card {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+
+  ion-card-header {
+    border-bottom: 1px solid #e0e0e0;
+
+    ion-card-title {
+      color: #2e7d32;
+      font-weight: 600;
+      font-size: 18px;
+    }
+  }
+
+  ion-list {
+    background: transparent;
+  }
+
+  ion-item {
+    --background: transparent;
+    --padding-start: 0;
+
+    ion-checkbox {
+      --border-color: #43a047;
+      --checkbox-background-checked: #43a047;
+      margin-right: 12px;
+    }
+
+    ion-label {
+      h3 {
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+
+      p {
+        color: #666;
+        font-size: 12px;
+      }
+    }
+
+    &:hover {
+      --background: rgba(67, 160, 71, 0.05);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 12px;
+  }
+
+  .welcome-card ion-card-content {
+    padding: 16px;
+
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .stat-card ion-card-content h3 {
+    font-size: 20px;
+  }
+}
