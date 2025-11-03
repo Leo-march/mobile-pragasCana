@@ -7,21 +7,27 @@
 
   <div class="dashboard-container">
     <!-- Bem-vindo -->
-    <ion-card class="welcome-card">
+    <ion-card class="welcome-card animate-fade-in">
       <ion-card-content>
+        <div class="welcome-icon">
+          <ion-icon name="leaf"></ion-icon>
+        </div>
         <h2>Bem-vindo de volta! 👋</h2>
         <p>Aqui está o resumo de hoje</p>
       </ion-card-content>
     </ion-card>
 
     <!-- Cards de Estatísticas -->
-    <div class="stats-grid">
+    <div class="stats-grid animate-slide-up">
       <ion-card class="stat-card" (click)="navegarParaCampos()">
         <ion-card-content>
-          <ion-icon name="camera-outline" class="stat-icon"></ion-icon>
+          <div class="stat-icon-wrapper">
+            <ion-icon name="camera-outline" class="stat-icon"></ion-icon>
+          </div>
           <h3>{{ fotosFaltando }}</h3>
           <p>Fotos Faltando</p>
           <span class="trend" [class.negative]="fotosFaltando > 0" [class.positive]="fotosFaltando === 0">
+            <ion-icon [name]="fotosFaltando === 0 ? 'checkmark-circle' : 'alert-circle'"></ion-icon>
             {{ fotosFaltando === 0 ? 'Completo!' : 'Pendente' }}
           </span>
         </ion-card-content>
@@ -29,47 +35,67 @@
 
       <ion-card class="stat-card" (click)="navegarParaCampos()">
         <ion-card-content>
-          <ion-icon name="trending-up" class="stat-icon"></ion-icon>
+          <div class="stat-icon-wrapper">
+            <ion-icon name="trending-up" class="stat-icon"></ion-icon>
+          </div>
           <h3>{{ taxaConclusao.toFixed(1) }}%</h3>
           <p>Taxa de Conclusão</p>
-          <span class="trend positive">{{ totalArmadilhas }} armadilhas</span>
+          <span class="trend positive">
+            <ion-icon name="checkbox-outline"></ion-icon>
+            {{ totalArmadilhas }} armadilhas
+          </span>
         </ion-card-content>
       </ion-card>
 
       <ion-card class="stat-card" (click)="navegarParaCampos()">
         <ion-card-content>
-          <ion-icon name="map-outline" class="stat-icon"></ion-icon>
+          <div class="stat-icon-wrapper">
+            <ion-icon name="map-outline" class="stat-icon"></ion-icon>
+          </div>
           <h3>{{ totalCampos }}</h3>
-          <p>Campos Cadastrados</p>
-          <span class="trend positive">Ativos</span>
+          <p>Talhões Cadastrados</p>
+          <span class="trend positive">
+            <ion-icon name="checkmark-circle"></ion-icon>
+            Ativos
+          </span>
         </ion-card-content>
       </ion-card>
     </div>
 
     <!-- Ações Rápidas -->
-    <ion-card class="activity-card">
+    <ion-card class="activity-card animate-slide-up-delay">
       <ion-card-header>
-        <ion-card-title>Ações Rápidas</ion-card-title>
+        <ion-card-title>
+          <ion-icon name="flash"></ion-icon>
+          Ações Rápidas
+        </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-button expand="block" color="success" (click)="navegarParaCampos()">
+        <ion-button expand="block" color="success" (click)="navegarParaCampos()" class="action-button">
           <ion-icon name="map" slot="start"></ion-icon>
-          Ver Meus Campos
+          Ver Meus Talhões
         </ion-button>
-        <ion-button expand="block" color="primary" (click)="navegarParaCampos()" class="mt-8">
-          <ion-icon name="add" slot="start"></ion-icon>
-          Adicionar Novo Campo
+        <ion-button expand="block" color="primary" (click)="navegarParaCampos()" class="action-button mt-8">
+          <ion-icon name="add-circle" slot="start"></ion-icon>
+          Adicionar Novo Talhão
         </ion-button>
       </ion-card-content>
     </ion-card>
 
     <!-- Informações -->
-    <ion-card class="info-card">
+    <ion-card class="info-card animate-slide-up-delay2">
       <ion-card-content>
-        <h3>💡 Dica</h3>
-        <p>Organize suas armadilhas por campo e mantenha o registro fotográfico atualizado para um monitoramento eficiente!</p>
+        <div class="info-header">
+          <ion-icon name="bulb"></ion-icon>
+          <h3>Dica do Dia</h3>
+        </div>
+        <p>Organize suas armadilhas por talhão e mantenha o registro fotográfico atualizado para um monitoramento eficiente!</p>
       </ion-card-content>
     </ion-card>
 
+    <!-- Decoração de fundo -->
+    <div class="bg-decoration top-left"></div>
+    <div class="bg-decoration bottom-right"></div>
+    <div class="bg-decoration middle"></div>
   </div>
 </ion-content>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { DataService, Campo } from '../services/data.service';
 
 @Component({
@@ -15,7 +15,8 @@ export class CamposPage implements OnInit {
   constructor(
     private dataService: DataService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -32,12 +33,12 @@ export class CamposPage implements OnInit {
 
   async novoCampo() {
     const alert = await this.alertController.create({
-      header: 'Novo Campo',
+      header: 'Novo Talhão',
       inputs: [
         {
           name: 'nome',
           type: 'text',
-          placeholder: 'Nome do campo',
+          placeholder: 'Nome do talhão',
           attributes: {
             required: true
           }
@@ -115,7 +116,7 @@ export class CamposPage implements OnInit {
   async deletarCampo(campo: Campo) {
     const alert = await this.alertController.create({
       header: 'Confirmar Exclusão',
-      message: `Deseja realmente deletar o campo "${campo.nome}"? Todas as armadilhas serão perdidas.`,
+      message: `Deseja realmente deletar o talhão "${campo.nome}"? Todas as armadilhas serão perdidas.`,
       buttons: [
         {
           text: 'Cancelar',
@@ -142,7 +143,7 @@ export class CamposPage implements OnInit {
   }
 
   voltarParaDashboard() {
-    this.router.navigate(['/dashboard']);
+    this.navController.back();
   }
 
   contarFotos(campo: Campo): number {

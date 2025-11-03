@@ -5,7 +5,7 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ campo?.nome || 'Campo' }}</ion-title>
+    <ion-title>{{ campo?.nome || 'Talhão' }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="novaArmadilha()">
         <ion-icon name="add"></ion-icon>
@@ -17,7 +17,7 @@
 <ion-content class="campo-detail-content">
   <div class="campo-detail-container" *ngIf="campo">
     
-    <!-- Informações do Campo -->
+    <!-- Informações do Talhão -->
     <ion-card class="info-card">
       <ion-card-content>
         <div class="info-header">
@@ -97,5 +97,9 @@
       </ion-card>
     </div>
 
+    <!-- Decoração de fundo -->
+    <div class="bg-decoration top-left"></div>
+    <div class="bg-decoration bottom-right"></div>
+    <div class="bg-decoration middle"></div>
   </div>
 </ion-content>

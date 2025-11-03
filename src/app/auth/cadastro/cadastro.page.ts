@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-cadastro',
@@ -16,7 +17,10 @@ export class CadastroPage implements OnInit {
   mostrarSenha = false;
   mostrarConfirmarSenha = false;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private navController: NavController
+  ) { }
 
   ngOnInit() {
   }
@@ -35,6 +39,6 @@ export class CadastroPage implements OnInit {
   }
 
   voltarParaLogin() {
-    this.router.navigate(['/login']);
+    this.navController.back();
   }
 }

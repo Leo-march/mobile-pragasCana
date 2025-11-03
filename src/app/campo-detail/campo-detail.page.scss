@@ -1,62 +1,136 @@
 .campo-detail-content {
   --background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  position: relative;
+  overflow: hidden;
 }
 
 .campo-detail-container {
   padding: 16px;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+// Animações
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 // Info Card
 .info-card {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.3);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  animation: fadeInScale 0.5s ease-out;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 250px;
+    height: 250px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+
+  ion-card-content {
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+  }
 
   .info-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
+    > div:first-child {
+      flex: 1;
+    }
+
     h2 {
       margin: 0 0 8px 0;
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
 
     p {
       margin: 0;
       opacity: 0.9;
-      font-size: 14px;
+      font-size: 15px;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
 
       ion-icon {
-        font-size: 16px;
+        font-size: 18px;
       }
     }
 
     .stats-badge {
       text-align: center;
       background: rgba(255, 255, 255, 0.2);
-      padding: 12px 16px;
-      border-radius: 12px;
+      padding: 16px 20px;
+      border-radius: 16px;
+      min-width: 100px;
+      backdrop-filter: blur(10px);
 
       .numero {
         display: block;
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 700;
         line-height: 1;
       }
 
       .label {
         display: block;
-        font-size: 12px;
+        font-size: 13px;
         opacity: 0.9;
-        margin-top: 4px;
+        margin-top: 6px;
+        font-weight: 500;
       }
     }
   }
@@ -65,108 +139,158 @@
 // Empty State
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
+  animation: fadeInScale 0.6s ease-out;
 
   ion-icon {
-    font-size: 100px;
+    font-size: 120px;
     color: #43a047;
     opacity: 0.3;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    animation: float 3s ease-in-out infinite;
   }
 
   h3 {
     color: #2e7d32;
-    margin: 0 0 10px 0;
-    font-size: 20px;
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    font-weight: 700;
   }
 
   p {
     color: #666;
-    margin: 0 0 30px 0;
+    margin: 0 0 32px 0;
+    font-size: 16px;
   }
 
   ion-button {
-    max-width: 300px;
+    max-width: 320px;
     margin: 0 auto;
+    height: 52px;
+    font-weight: 600;
+    --border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
+    }
   }
 }
 
 // Grid de Armadilhas
 .armadilhas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .armadilha-card {
   margin: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  border-radius: 20px;
+  background: white;
+  animation: slideInUp 0.6s ease-out both;
+  position: relative;
+
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.05}s;
+    }
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #fbc02d 0%, #43a047 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+  }
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(67, 160, 71, 0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(67, 160, 71, 0.25);
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .foto-area .sem-foto {
+      color: #43a047;
+      transform: scale(1.1);
+    }
   }
 
   &.com-foto {
-    border-top: 4px solid #43a047;
+    &::before {
+      background: linear-gradient(90deg, #43a047 0%, #66bb6a 100%);
+      transform: scaleX(1);
+    }
   }
 
   .foto-area {
     width: 100%;
-    height: 200px;
-    background: #f5f5f5;
+    height: 220px;
+    background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
     }
 
     .sem-foto {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       color: #999;
-      transition: color 0.2s;
+      transition: all 0.3s ease;
 
       ion-icon {
-        font-size: 48px;
+        font-size: 56px;
       }
 
       span {
-        font-size: 14px;
-        font-weight: 500;
+        font-size: 15px;
+        font-weight: 600;
       }
-    }
-
-    &:hover .sem-foto {
-      color: #43a047;
     }
   }
 
   ion-card-content {
-    padding: 16px;
+    padding: 20px;
 
     .armadilha-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
 
       h3 {
         margin: 0;
         color: #2e7d32;
-        font-size: 18px;
-        font-weight: 600;
+        font-size: 20px;
+        font-weight: 700;
         flex: 1;
       }
 
@@ -175,58 +299,116 @@
         gap: 4px;
 
         ion-button {
-          --padding-start: 6px;
-          --padding-end: 6px;
+          --padding-start: 8px;
+          --padding-end: 8px;
           margin: 0;
-          height: 32px;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          transition: all 0.3s ease;
 
           ion-icon {
-            font-size: 18px;
+            font-size: 20px;
+          }
+
+          &:hover {
+            transform: scale(1.15) rotate(10deg);
           }
         }
       }
     }
 
     .observacoes {
-      margin: 0 0 12px 0;
+      margin: 0 0 16px 0;
       color: #666;
       font-size: 14px;
-      line-height: 1.4;
+      line-height: 1.5;
+      padding: 12px;
+      background: #f5f5f5;
+      border-radius: 10px;
+      border-left: 3px solid #43a047;
     }
 
     .data-foto {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       color: #666;
-      font-size: 12px;
-      margin-bottom: 12px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border-radius: 10px;
 
       ion-icon {
-        font-size: 16px;
+        font-size: 18px;
         color: #43a047;
       }
     }
 
     ion-button {
-      margin-top: 8px;
-      height: 44px;
+      margin-top: 12px;
+      height: 48px;
+      font-weight: 600;
+      --border-radius: 12px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
     }
+  }
+}
+
+// Background Decorations
+.bg-decoration {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  z-index: 0;
+  animation: float 8s ease-in-out infinite;
+
+  &.top-left {
+    width: 300px;
+    height: 300px;
+    top: -150px;
+    left: -150px;
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
+  }
+
+  &.bottom-right {
+    width: 250px;
+    height: 250px;
+    bottom: -125px;
+    right: -125px;
+    background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%);
+    animation-delay: 3s;
+  }
+
+  &.middle {
+    width: 200px;
+    height: 200px;
+    top: 50%;
+    right: -100px;
+    background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+    animation-delay: 6s;
   }
 }
 
 @media (max-width: 768px) {
   .armadilhas-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 
   .info-card .info-header {
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     align-items: flex-start;
 
     .stats-badge {
       align-self: center;
+      min-width: 120px;
     }
   }
 }
@@ -238,5 +420,9 @@
 
   .campo-detail-container {
     padding: 12px;
+  }
+
+  .armadilha-card .foto-area {
+    height: 200px;
   }
 }

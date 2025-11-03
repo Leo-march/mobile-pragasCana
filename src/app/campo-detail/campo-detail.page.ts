@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, ActionSheetController } from '@ionic/angular';
+import { AlertController, ActionSheetController, NavController } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { DataService, Campo, Armadilha } from '../services/data.service';
 
@@ -19,7 +19,8 @@ export class CampoDetailPage implements OnInit {
     private router: Router,
     private dataService: DataService,
     private alertController: AlertController,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -38,7 +39,7 @@ export class CampoDetailPage implements OnInit {
       this.campo = this.dataService.getCampo(this.campoId);
       if (!this.campo) {
         // Campo não encontrado, volta para lista
-        this.router.navigate(['/campos']);
+        this.navController.back();
       }
     }
   }
@@ -223,6 +224,6 @@ export class CampoDetailPage implements OnInit {
   }
 
   voltar() {
-    this.router.navigate(['/campos']);
+    this.navController.back();
   }
 }
