@@ -1,0 +1,127 @@
+<ion-content class="cadastro-content">
+  <div class="cadastro-container">
+    
+    <!-- Botão Voltar -->
+    <div class="back-button-area animate-fade-in">
+      <ion-button fill="clear" (click)="voltarParaLogin()" class="back-button">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Voltar
+      </ion-button>
+    </div>
+
+    <!-- Área de Logo/Header -->
+    <div class="logo-area animate-fade-in">
+      <div class="logo-circle">
+        <ion-icon name="leaf" class="logo-icon"></ion-icon>
+      </div>
+      <h1 class="app-title">Criar Conta</h1>
+      <p class="app-subtitle">Preencha os dados para começar</p>
+    </div>
+
+    <!-- Formulário de Cadastro -->
+    <div class="form-container animate-slide-up">
+      <form (ngSubmit)="fazerCadastro()">
+        
+        <!-- Campo Nome -->
+        <div class="input-group">
+          <ion-icon name="person-outline" class="input-icon"></ion-icon>
+          <input 
+            type="text" 
+            [(ngModel)]="nome" 
+            name="nome"
+            placeholder="Nome completo"
+            class="custom-input"
+            required>
+        </div>
+
+        <!-- Campo Email -->
+        <div class="input-group">
+          <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+          <input 
+            type="email" 
+            [(ngModel)]="email" 
+            name="email"
+            placeholder="E-mail"
+            class="custom-input"
+            required>
+        </div>
+
+        <!-- Campo Telefone -->
+        <div class="input-group">
+          <ion-icon name="call-outline" class="input-icon"></ion-icon>
+          <input 
+            type="tel" 
+            [(ngModel)]="telefone" 
+            name="telefone"
+            placeholder="Telefone (opcional)"
+            class="custom-input">
+        </div>
+
+        <!-- Campo Senha -->
+        <div class="input-group">
+          <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+          <input 
+            [type]="mostrarSenha ? 'text' : 'password'" 
+            [(ngModel)]="senha" 
+            name="senha"
+            placeholder="Senha"
+            class="custom-input"
+            required>
+          <ion-icon 
+            [name]="mostrarSenha ? 'eye-off-outline' : 'eye-outline'" 
+            class="toggle-password"
+            (click)="toggleMostrarSenha()">
+          </ion-icon>
+        </div>
+
+        <!-- Campo Confirmar Senha -->
+        <div class="input-group">
+          <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+          <input 
+            [type]="mostrarConfirmarSenha ? 'text' : 'password'" 
+            [(ngModel)]="confirmarSenha" 
+            name="confirmarSenha"
+            placeholder="Confirmar senha"
+            class="custom-input"
+            required>
+          <ion-icon 
+            [name]="mostrarConfirmarSenha ? 'eye-off-outline' : 'eye-outline'" 
+            class="toggle-password"
+            (click)="toggleMostrarConfirmarSenha()">
+          </ion-icon>
+        </div>
+
+        <!-- Termos de Uso -->
+        <div class="terms-area">
+          <p>
+            Ao criar uma conta, você concorda com nossos 
+            <a>Termos de Uso</a> e 
+            <a>Política de Privacidade</a>
+          </p>
+        </div>
+
+        <!-- Botão de Cadastro -->
+        <ion-button 
+          expand="block" 
+          type="submit"
+          class="signup-button">
+          Criar Conta
+          <ion-icon name="checkmark-circle" slot="end"></ion-icon>
+        </ion-button>
+      </form>
+
+      <!-- Já tem conta -->
+      <div class="login-link">
+        <p>
+          Já tem uma conta? 
+          <a (click)="voltarParaLogin()">Entrar</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Decoração de fundo -->
+    <div class="bg-decoration top-left"></div>
+    <div class="bg-decoration bottom-right"></div>
+    <div class="bg-decoration middle"></div>
+  </div>
+</ion-content>

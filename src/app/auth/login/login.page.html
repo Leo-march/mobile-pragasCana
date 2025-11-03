@@ -1,0 +1,83 @@
+<ion-content class="login-content">
+  <div class="login-container">
+    
+    <!-- Área de Logo/Header -->
+    <div class="logo-area animate-fade-in">
+      <div class="logo-circle">
+        <ion-icon name="leaf" class="logo-icon"></ion-icon>
+      </div>
+      <h1 class="app-title">PragasCana</h1>
+      <p class="app-subtitle">Monitoramento de Pragas</p>
+    </div>
+
+    <!-- Formulário de Login -->
+    <div class="form-container animate-slide-up">
+      <h2 class="form-title">Bem-vindo de volta!</h2>
+      <p class="form-subtitle">Entre para continuar</p>
+
+      <form (ngSubmit)="fazerLogin()">
+        <!-- Campo Email -->
+        <div class="input-group">
+          <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+          <input 
+            type="email" 
+            [(ngModel)]="email" 
+            name="email"
+            placeholder="E-mail"
+            class="custom-input"
+            required>
+        </div>
+
+        <!-- Campo Senha -->
+        <div class="input-group">
+          <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+          <input 
+            [type]="mostrarSenha ? 'text' : 'password'" 
+            [(ngModel)]="senha" 
+            name="senha"
+            placeholder="Senha"
+            class="custom-input"
+            required>
+          <ion-icon 
+            [name]="mostrarSenha ? 'eye-off-outline' : 'eye-outline'" 
+            class="toggle-password"
+            (click)="toggleMostrarSenha()">
+          </ion-icon>
+        </div>
+
+        <!-- Esqueceu a senha -->
+        <div class="forgot-password">
+          <a>Esqueceu a senha?</a>
+        </div>
+
+        <!-- Botão de Login -->
+        <ion-button 
+          expand="block" 
+          type="submit"
+          class="login-button">
+          Entrar
+          <ion-icon name="arrow-forward" slot="end"></ion-icon>
+        </ion-button>
+      </form>
+
+      <!-- Divisor -->
+      <div class="divider">
+        <span>ou</span>
+      </div>
+
+      <!-- Botão de Cadastro -->
+      <ion-button 
+        expand="block" 
+        fill="outline"
+        class="signup-button"
+        (click)="irParaCadastro()">
+        <ion-icon name="person-add-outline" slot="start"></ion-icon>
+        Criar nova conta
+      </ion-button>
+    </div>
+
+    <!-- Decoração de fundo -->
+    <div class="bg-decoration top-left"></div>
+    <div class="bg-decoration bottom-right"></div>
+  </div>
+</ion-content>
