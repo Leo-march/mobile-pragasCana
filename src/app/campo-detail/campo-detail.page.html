@@ -1,18 +1,13 @@
-<ion-header>
-  <ion-toolbar color="success">
-    <ion-buttons slot="start">
-      <ion-button (click)="voltar()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>{{ campo?.nome || 'Talhão' }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="novaArmadilha()">
-        <ion-icon name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<div class="custom-header">
+  <button class="header-back-button" (click)="voltar()">
+    <ion-icon name="chevron-back"></ion-icon>
+    <span>Voltar</span>
+  </button>
+  <h1 class="header-title">{{ campo?.nome || 'Talhão' }}</h1>
+  <button class="header-add-button" (click)="novaArmadilha()">
+    <ion-icon name="add"></ion-icon>
+  </button>
+</div>
 
 <ion-content class="campo-detail-content">
   <div class="campo-detail-container" *ngIf="campo">

@@ -1,12 +1,14 @@
-<ion-content class="cadastro-content">
+<ion-content class="cadastro-content" [scrollY]="false">
   <div class="cadastro-container">
     
-    <!-- Botão Voltar -->
+    <!-- Botão Voltar NOVO DESIGN -->
     <div class="back-button-area animate-fade-in">
-      <ion-button fill="clear" (click)="voltarParaLogin()" class="back-button">
-        <ion-icon name="arrow-back" slot="start"></ion-icon>
-        Voltar
-      </ion-button>
+      <button class="custom-back-button" (click)="voltarParaLogin()">
+        <div class="button-content">
+          <ion-icon name="chevron-back"></ion-icon>
+          <span>Voltar</span>
+        </div>
+      </button>
     </div>
 
     <!-- Área de Logo/Header -->
@@ -74,7 +76,7 @@
           </ion-icon>
         </div>
 
-        <!-- Talhão Confirmar Senha -->
+        <!-- Campo Confirmar Senha -->
         <div class="input-group">
           <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
           <input 

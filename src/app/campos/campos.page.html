@@ -1,20 +1,15 @@
-<ion-header>
-  <ion-toolbar color="success">
-    <ion-buttons slot="start">
-      <ion-button (click)="voltarParaDashboard()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>Meus Talhões</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="novoCampo()">
-        <ion-icon name="add-circle"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<div class="custom-header">
+  <button class="header-back-button" (click)="voltarParaDashboard()">
+    <ion-icon name="chevron-back"></ion-icon>
+    <span>Voltar</span>
+  </button>
+  <h1 class="header-title">Meus Talhões</h1>
+  <button class="header-add-button" (click)="novoCampo()">
+    <ion-icon name="add"></ion-icon>
+  </button>
+</div>
 
-<ion-content class="campos-content">
+<ion-content class="campos-content" [scrollY]="true">
   <div class="campos-container">
     
     <!-- Mensagem quando não há campos -->

@@ -1,7 +1,7 @@
 .login-content {
   --background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
   position: relative;
-  overflow: hidden;
+  --overflow: hidden;
 }
 
 .login-container {
@@ -13,6 +13,14 @@
   padding: 20px;
   position: relative;
   z-index: 1;
+  overflow-y: auto;
+  max-height: 100vh;
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE/Edge
+  
+  &::-webkit-scrollbar {
+    display: none; // Chrome/Safari
+  }
 }
 
 // Animações
