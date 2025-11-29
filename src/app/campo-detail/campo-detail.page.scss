@@ -43,7 +43,7 @@
   .header-back-button {
     span {
       @media (max-width: 480px) {
-        display: none; // Esconde texto em telas pequenas
+        display: none;
       }
     }
   }
@@ -53,7 +53,7 @@
     justify-content: center;
     
     span {
-      display: none; // Só mostra o ícone
+      display: none;
     }
   }
 
@@ -72,16 +72,15 @@
   }
 }
 
-// Ajustar padding do conteúdo
 .campos-content,
 .campo-detail-content {
-  --padding-top: 0; // Remove padding extra do topo
+  --padding-top: 0;
 }
 
 .campo-detail-content {
   --background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
   position: relative;
-  overflow: hidden;
+  overflow: hidden; // IMPORTANTE: impede scroll horizontal
 }
 
 .campo-detail-container {
@@ -90,6 +89,7 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  overflow-x: hidden; // ADICIONADO: impede scroll horizontal
 }
 
 // Animações
@@ -441,12 +441,13 @@
   }
 }
 
-// Background Decorations
+// Background Decorations - CORRIGIDO
 .bg-decoration {
-  position: absolute;
+  position: fixed; // MUDADO de absolute para fixed
   border-radius: 50%;
   opacity: 0.08;
   z-index: 0;
+  pointer-events: none; // ADICIONADO: impede interação
   animation: float 8s ease-in-out infinite;
 
   &.top-left {

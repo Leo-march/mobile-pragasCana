@@ -47,28 +47,35 @@ export class CampoDetailPage implements OnInit {
   async novaArmadilha() {
     const alert = await this.alertController.create({
       header: 'Nova Armadilha',
+      cssClass: 'custom-alert-modal',
       inputs: [
         {
           name: 'nome',
           type: 'text',
           placeholder: 'Nome/Número da armadilha',
           attributes: {
-            required: true
+            required: true,
+            maxlength: 50
           }
         },
         {
           name: 'observacoes',
           type: 'textarea',
-          placeholder: 'Observações (opcional)'
+          placeholder: 'Observações (opcional)',
+          attributes: {
+            maxlength: 200
+          }
         }
       ],
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Criar',
+          cssClass: 'alert-button-confirm',
           handler: (data) => {
             if (data.nome && data.nome.trim() && this.campoId) {
               this.dataService.adicionarArmadilha(
@@ -86,32 +93,49 @@ export class CampoDetailPage implements OnInit {
     });
 
     await alert.present();
+    
+    // Força o foco no primeiro input após um pequeno delay
+    setTimeout(() => {
+      const firstInput = document.querySelector('ion-alert input') as HTMLInputElement;
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }, 300);
   }
 
   async editarArmadilha(armadilha: Armadilha) {
     const alert = await this.alertController.create({
       header: 'Editar Armadilha',
+      cssClass: 'custom-alert-modal',
       inputs: [
         {
           name: 'nome',
           type: 'text',
           placeholder: 'Nome/Número',
-          value: armadilha.nome
+          value: armadilha.nome,
+          attributes: {
+            maxlength: 50
+          }
         },
         {
           name: 'observacoes',
           type: 'textarea',
           placeholder: 'Observações',
-          value: armadilha.observacoes || ''
+          value: armadilha.observacoes || '',
+          attributes: {
+            maxlength: 200
+          }
         }
       ],
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Salvar',
+          cssClass: 'alert-button-confirm',
           handler: (data) => {
             if (data.nome && data.nome.trim() && this.campoId) {
               this.dataService.atualizarArmadilha(this.campoId, armadilha.id, {
@@ -128,20 +152,29 @@ export class CampoDetailPage implements OnInit {
     });
 
     await alert.present();
+    
+    setTimeout(() => {
+      const firstInput = document.querySelector('ion-alert input') as HTMLInputElement;
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }, 300);
   }
 
   async deletarArmadilha(armadilha: Armadilha) {
     const alert = await this.alertController.create({
       header: 'Confirmar Exclusão',
       message: `Deseja realmente deletar a armadilha "${armadilha.nome}"?`,
+      cssClass: 'custom-alert-modal',
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Deletar',
-          role: 'destructive',
+          cssClass: 'alert-button-confirm',
           handler: () => {
             if (this.campoId) {
               this.dataService.deletarArmadilha(this.campoId, armadilha.id);
@@ -175,7 +208,13 @@ export class CampoDetailPage implements OnInit {
       const alert = await this.alertController.create({
         header: 'Erro',
         message: 'Não foi possível acessar a câmera. Verifique as permissões.',
-        buttons: ['OK']
+        cssClass: 'custom-alert-modal',
+        buttons: [
+          {
+            text: 'OK',
+            cssClass: 'alert-button-confirm'
+          }
+        ]
       });
       await alert.present();
     }
@@ -186,6 +225,7 @@ export class CampoDetailPage implements OnInit {
 
     const actionSheet = await this.actionSheetController.create({
       header: `Foto - ${armadilha.nome}`,
+      cssClass: 'custom-action-sheet',
       buttons: [
         {
           text: 'Tirar Nova Foto',

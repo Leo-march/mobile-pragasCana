@@ -34,28 +34,35 @@ export class CamposPage implements OnInit {
   async novoCampo() {
     const alert = await this.alertController.create({
       header: 'Novo Talhão',
+      cssClass: 'custom-alert-modal',
       inputs: [
         {
           name: 'nome',
           type: 'text',
           placeholder: 'Nome do talhão',
           attributes: {
-            required: true
+            required: true,
+            maxlength: 50
           }
         },
         {
           name: 'localizacao',
           type: 'text',
-          placeholder: 'Localização (opcional)'
+          placeholder: 'Localização (opcional)',
+          attributes: {
+            maxlength: 100
+          }
         }
       ],
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Criar',
+          cssClass: 'alert-button-confirm',
           handler: (data) => {
             if (data.nome && data.nome.trim()) {
               this.dataService.criarCampo(data.nome.trim(), data.localizacao?.trim());
@@ -69,32 +76,49 @@ export class CamposPage implements OnInit {
     });
 
     await alert.present();
+    
+    // Força o foco no primeiro input após um pequeno delay
+    setTimeout(() => {
+      const firstInput = document.querySelector('ion-alert input') as HTMLInputElement;
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }, 300);
   }
 
   async editarCampo(campo: Campo) {
     const alert = await this.alertController.create({
-      header: 'Editar Campo',
+      header: 'Editar Talhão',
+      cssClass: 'custom-alert-modal',
       inputs: [
         {
           name: 'nome',
           type: 'text',
-          placeholder: 'Nome do campo',
-          value: campo.nome
+          placeholder: 'Nome do talhão',
+          value: campo.nome,
+          attributes: {
+            maxlength: 50
+          }
         },
         {
           name: 'localizacao',
           type: 'text',
           placeholder: 'Localização',
-          value: campo.localizacao || ''
+          value: campo.localizacao || '',
+          attributes: {
+            maxlength: 100
+          }
         }
       ],
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Salvar',
+          cssClass: 'alert-button-confirm',
           handler: (data) => {
             if (data.nome && data.nome.trim()) {
               this.dataService.atualizarCampo(campo.id, {
@@ -111,20 +135,29 @@ export class CamposPage implements OnInit {
     });
 
     await alert.present();
+    
+    setTimeout(() => {
+      const firstInput = document.querySelector('ion-alert input') as HTMLInputElement;
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }, 300);
   }
 
   async deletarCampo(campo: Campo) {
     const alert = await this.alertController.create({
       header: 'Confirmar Exclusão',
       message: `Deseja realmente deletar o talhão "${campo.nome}"? Todas as armadilhas serão perdidas.`,
+      cssClass: 'custom-alert-modal',
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Deletar',
-          role: 'destructive',
+          cssClass: 'alert-button-confirm',
           handler: () => {
             this.dataService.deletarCampo(campo.id);
             this.carregarCampos();

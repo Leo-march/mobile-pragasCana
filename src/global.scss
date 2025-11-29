@@ -35,3 +35,254 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* ============================================
+   ESTILOS CUSTOMIZADOS PARA MODAIS/ALERTS
+   ============================================ */
+
+// Modal de Alert customizado para evitar sobreposição do teclado
+.custom-alert-modal {
+  --backdrop-opacity: 0.6;
+  
+  .alert-wrapper {
+    position: fixed !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    max-height: 90vh !important;
+    overflow: visible !important;
+    margin-top: 0 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .alert-head {
+    padding: 24px 20px 16px !important;
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-radius: 20px 20px 0 0 !important;
+    
+    h2 {
+      color: white !important;
+      font-size: 22px !important;
+      font-weight: 700 !important;
+      text-align: center !important;
+      margin: 0 !important;
+    }
+  }
+
+  .alert-message {
+    padding: 20px !important;
+    color: #666 !important;
+    font-size: 15px !important;
+    text-align: center !important;
+    line-height: 1.5 !important;
+  }
+
+  .alert-input-group {
+    padding: 8px 20px !important;
+    
+    .alert-input-wrapper {
+      margin-bottom: 16px !important;
+      
+      &:last-child {
+        margin-bottom: 8px !important;
+      }
+    }
+  }
+
+  .alert-input {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 12px !important;
+    padding: 14px 16px !important;
+    font-size: 15px !important;
+    color: #333 !important;
+    background: #fafafa !important;
+    transition: all 0.3s ease !important;
+    
+    &:focus {
+      border-color: #43a047 !important;
+      background: white !important;
+      box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.1) !important;
+    }
+
+    &::placeholder {
+      color: #999 !important;
+      font-size: 14px !important;
+    }
+  }
+
+  .alert-button-group {
+    padding: 12px 20px 20px !important;
+    display: flex !important;
+    gap: 12px !important;
+    border-top: 1px solid #e0e0e0 !important;
+    margin-top: 8px !important;
+  }
+
+  .alert-button {
+    flex: 1 !important;
+    margin: 0 !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    letter-spacing: 0.3px !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    line-height: 48px !important;
+
+    &.alert-button-cancel {
+      background: #f5f5f5 !important;
+      color: #666 !important;
+      
+      &:hover {
+        background: #e0e0e0 !important;
+      }
+
+      &:active {
+        transform: scale(0.98) !important;
+      }
+    }
+
+    &.alert-button-confirm {
+      background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+      color: white !important;
+      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3) !important;
+      
+      &:hover {
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%) !important;
+        box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4) !important;
+      }
+
+      &:active {
+        transform: scale(0.98) !important;
+      }
+    }
+
+    .button-inner {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    span {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      width: 100% !important;
+      height: 100% !important;
+      line-height: normal !important;
+    }
+  }
+}
+
+// Ajustes para quando o teclado está aberto em dispositivos móveis
+@media (max-height: 600px) {
+  .custom-alert-modal {
+    .alert-wrapper {
+      max-height: 80vh !important;
+      top: 45% !important;
+    }
+  }
+}
+
+// Estilo para modais em geral com fundo desfocado
+.modal-backdrop-blur {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+// Animação suave para modais
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.custom-alert-modal .alert-wrapper {
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ============================================
+   ESTILOS CUSTOMIZADOS PARA ACTION SHEETS
+   ============================================ */
+
+.custom-action-sheet {
+  .action-sheet-wrapper {
+    border-radius: 20px 20px 0 0 !important;
+    overflow: hidden !important;
+  }
+
+  .action-sheet-title {
+    padding: 20px 16px !important;
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    color: white !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    border-bottom: none !important;
+  }
+
+  .action-sheet-group {
+    padding: 8px 0 !important;
+  }
+
+  .action-sheet-button {
+    height: 56px !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+      background: rgba(67, 160, 71, 0.1) !important;
+    }
+
+    &:active {
+      background: rgba(67, 160, 71, 0.2) !important;
+    }
+
+    .action-sheet-icon {
+      font-size: 24px !important;
+      margin-right: 16px !important;
+    }
+
+    &.action-sheet-destructive {
+      color: #d32f2f !important;
+
+      .action-sheet-icon {
+        color: #d32f2f !important;
+      }
+
+      &:hover {
+        background: rgba(211, 47, 47, 0.1) !important;
+      }
+
+      &:active {
+        background: rgba(211, 47, 47, 0.2) !important;
+      }
+    }
+
+    &.action-sheet-cancel {
+      font-weight: 600 !important;
+      border-top: 1px solid #e0e0e0 !important;
+      margin-top: 8px !important;
+
+      &:hover {
+        background: #f5f5f5 !important;
+      }
+    }
+  }
+}

@@ -19,7 +19,8 @@
 
     <!-- Cards de Estatísticas -->
     <div class="stats-grid animate-slide-up">
-      <ion-card class="stat-card" (click)="navegarParaCampos()">
+      <!-- Card Fotos Faltando - SEM clique -->
+      <ion-card class="stat-card no-click">
         <ion-card-content>
           <div class="stat-icon-wrapper">
             <ion-icon name="camera-outline" class="stat-icon"></ion-icon>
@@ -33,6 +34,7 @@
         </ion-card-content>
       </ion-card>
 
+      <!-- Card Taxa de Conclusão - clique para /campos -->
       <ion-card class="stat-card" (click)="navegarParaCampos()">
         <ion-card-content>
           <div class="stat-icon-wrapper">
@@ -47,6 +49,7 @@
         </ion-card-content>
       </ion-card>
 
+      <!-- Card Talhões Cadastrados - clique para /campos -->
       <ion-card class="stat-card" (click)="navegarParaCampos()">
         <ion-card-content>
           <div class="stat-icon-wrapper">
@@ -71,11 +74,14 @@
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
+        <!-- Ver Meus Talhões - navega para /campos -->
         <ion-button expand="block" color="success" (click)="navegarParaCampos()" class="action-button">
           <ion-icon name="map" slot="start"></ion-icon>
           Ver Meus Talhões
         </ion-button>
-        <ion-button expand="block" color="primary" (click)="navegarParaCampos()" class="action-button mt-8">
+        
+        <!-- Adicionar Novo Talhão - abre modal diretamente -->
+        <ion-button expand="block" color="primary" (click)="adicionarNovoTalhao()" class="action-button mt-8">
           <ion-icon name="add-circle" slot="start"></ion-icon>
           Adicionar Novo Talhão
         </ion-button>
