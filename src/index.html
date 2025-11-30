@@ -23,6 +23,121 @@
 
 <body>
   <app-root></app-root>
+
+  <script>
+    // Solução melhorada para detectar teclado e ajustar modais
+    (function() {
+      let initialViewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      let currentViewportHeight = initialViewportHeight;
+      let keyboardTimeout;
+
+      function adjustModalPosition() {
+        const modals = document.querySelectorAll('.custom-alert-modal');
+        const newHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        const heightDiff = currentViewportHeight - newHeight;
+
+        console.log('Height diff:', heightDiff, 'Current:', currentViewportHeight, 'New:', newHeight);
+
+        if (heightDiff > 100) {
+          // Teclado abriu
+          console.log('Teclado ABRIU');
+          modals.forEach(modal => {
+            modal.classList.add('keyboard-open');
+            console.log('Adicionou classe keyboard-open ao modal');
+          });
+        } else if (heightDiff < -100) {
+          // Teclado fechou
+          console.log('Teclado FECHOU');
+          modals.forEach(modal => {
+            modal.classList.remove('keyboard-open');
+            console.log('Removeu classe keyboard-open do modal');
+          });
+        }
+
+        currentViewportHeight = newHeight;
+      }
+
+      // Usa visualViewport se disponível (melhor para mobile)
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+          clearTimeout(keyboardTimeout);
+          keyboardTimeout = setTimeout(adjustModalPosition, 100);
+        });
+      } else {
+        window.addEventListener('resize', () => {
+          clearTimeout(keyboardTimeout);
+          keyboardTimeout = setTimeout(adjustModalPosition, 100);
+        });
+      }
+
+      // Detecta foco em inputs
+      document.addEventListener('focusin', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+          console.log('Input focado:', e.target);
+          
+          // Força verificação após um delay
+          setTimeout(() => {
+            adjustModalPosition();
+            
+            // Scroll suave para o input focado
+            const modal = e.target.closest('.custom-alert-modal');
+            if (modal) {
+              const alertWrapper = modal.querySelector('.alert-wrapper');
+              const input = e.target;
+              const inputRect = input.getBoundingClientRect();
+              const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+              
+              // Se o input estiver na metade inferior da tela
+              if (inputRect.top > viewportHeight / 2) {
+                console.log('Input na metade inferior, ajustando...');
+                modal.classList.add('keyboard-open');
+              }
+            }
+          }, 300);
+        }
+      });
+
+      // Detecta perda de foco
+      document.addEventListener('focusout', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+          console.log('Input desfocado:', e.target);
+          setTimeout(adjustModalPosition, 300);
+        }
+      });
+
+      // Observa quando novos modais são criados
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          mutation.addedNodes.forEach((node) => {
+            if (node.classList && node.classList.contains('custom-alert-modal')) {
+              console.log('Novo modal detectado!');
+              
+              // Adiciona listener de clique nos inputs do modal
+              setTimeout(() => {
+                const inputs = node.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                  input.addEventListener('focus', () => {
+                    console.log('Input do modal focado');
+                    setTimeout(() => {
+                      node.classList.add('keyboard-open');
+                    }, 200);
+                  });
+                });
+              }, 100);
+            }
+          });
+        });
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+
+      // Log inicial
+      console.log('Script de detecção de teclado carregado!');
+    })();
+  </script>
 </body>
 
 </html>

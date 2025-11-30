@@ -19,8 +19,8 @@
 
     <!-- Cards de Estatísticas -->
     <div class="stats-grid animate-slide-up">
-      <!-- Card Fotos Faltando - SEM clique -->
-      <ion-card class="stat-card no-click">
+      <!-- Card Fotos Faltando - COM clique -->
+      <ion-card class="stat-card" (click)="mostrarDetalhesFotosFaltando()">
         <ion-card-content>
           <div class="stat-icon-wrapper">
             <ion-icon name="camera-outline" class="stat-icon"></ion-icon>
@@ -79,7 +79,7 @@
           <ion-icon name="map" slot="start"></ion-icon>
           Ver Meus Talhões
         </ion-button>
-        
+
         <!-- Adicionar Novo Talhão - abre modal diretamente -->
         <ion-button expand="block" color="primary" (click)="adicionarNovoTalhao()" class="action-button mt-8">
           <ion-icon name="add-circle" slot="start"></ion-icon>
@@ -95,7 +95,8 @@
           <ion-icon name="bulb"></ion-icon>
           <h3>Dica do Dia</h3>
         </div>
-        <p>Organize suas armadilhas por talhão e mantenha o registro fotográfico atualizado para um monitoramento eficiente!</p>
+        <p>Organize suas armadilhas por talhão e mantenha o registro fotográfico atualizado para um monitoramento
+          eficiente!</p>
       </ion-card-content>
     </ion-card>
 

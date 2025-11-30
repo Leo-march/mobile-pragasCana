@@ -26,7 +26,6 @@ export class DashboardPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    // Atualiza dados sempre que a página aparecer
     this.carregarEstatisticas();
   }
 
@@ -43,6 +42,69 @@ export class DashboardPage implements OnInit {
 
   navegarParaCampos() {
     this.router.navigate(['/campos']);
+  }
+
+  async mostrarDetalhesFotosFaltando() {
+    const campos = this.dataService.getCampos();
+    const detalhes: { nome: string; faltando: number }[] = [];
+    
+    // Calcular fotos faltando por talhão
+    campos.forEach(campo => {
+      const fotosFaltando = campo.armadilhas.filter(a => !a.foto).length;
+      if (fotosFaltando > 0) {
+        detalhes.push({
+          nome: campo.nome,
+          faltando: fotosFaltando
+        });
+      }
+    });
+
+    if (detalhes.length === 0) {
+      // Nenhuma foto faltando
+      const alert = await this.alertController.create({
+        header: '✅ Parabéns!',
+        message: 'Todas as armadilhas já possuem fotos registradas!',
+        cssClass: 'custom-alert-modal',
+        buttons: [
+          {
+            text: 'OK',
+            cssClass: 'alert-button-confirm'
+          }
+        ]
+      });
+      await alert.present();
+      return;
+    }
+
+    // Criar mensagem de texto simples formatada
+    let mensagem = `Total: ${this.fotosFaltando} ${this.fotosFaltando === 1 ? 'foto faltando' : 'fotos faltando'}\n\n`;
+    
+    detalhes.forEach((item, index) => {
+      const texto = item.faltando === 1 ? 'foto' : 'fotos';
+      mensagem += `📍 ${item.nome}\n   ${item.faltando} ${texto} faltando\n\n`;
+    });
+
+    const alert = await this.alertController.create({
+      header: '📸 Fotos Faltando por Talhão',
+      message: mensagem,
+      cssClass: 'custom-alert-modal fotos-faltando-alert',
+      buttons: [
+        {
+          text: 'Fechar',
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
+        },
+        {
+          text: 'Ver Talhões',
+          cssClass: 'alert-button-confirm',
+          handler: () => {
+            this.navegarParaCampos();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   async adicionarNovoTalhao() {
@@ -92,7 +154,6 @@ export class DashboardPage implements OnInit {
 
     await alert.present();
     
-    // Força o foco no primeiro input após um pequeno delay
     setTimeout(() => {
       const firstInput = document.querySelector('ion-alert input') as HTMLInputElement;
       if (firstInput) {
