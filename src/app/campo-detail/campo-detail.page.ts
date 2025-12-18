@@ -4,349 +4,6 @@ import { AlertController, ActionSheetController, NavController, ModalController 
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { DataService, Campo, Armadilha } from '../services/data.service';
 
-// Importar o componente de vistoria
-@Component({
-  selector: 'app-vistoria-modal',
-  template: `
-<ion-header>
-  <ion-toolbar color="success">
-    <ion-buttons slot="start">
-      <ion-button (click)="fecharVistoria()">
-        <ion-icon name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>Vistoria Rápida</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="vistoria-content">
-  <div class="progress-section">
-    <div class="progress-info">
-      <h3>{{ campo?.nome }}</h3>
-      <p>{{ indiceAtual + 1 }} de {{ armadilhas.length }} armadilhas</p>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-fill" [style.width]="progresso + '%'"></div>
-    </div>
-  </div>
-
-  <div class="armadilha-atual" *ngIf="!vistoriaFinalizada">
-    <ion-card class="armadilha-card">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="flag"></ion-icon>
-          {{ armadilhaAtual?.nome }}
-        </ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <div class="foto-preview" *ngIf="fotoAtual">
-          <img [src]="fotoAtual" alt="Preview">
-          <div class="foto-overlay">
-            <ion-icon name="checkmark-circle" color="success"></ion-icon>
-            <p>Foto capturada!</p>
-          </div>
-        </div>
-
-        <div class="sem-foto" *ngIf="!fotoAtual">
-          <ion-icon name="camera-outline"></ion-icon>
-          <p>Pronto para fotografar</p>
-        </div>
-
-        <div class="observacoes" *ngIf="armadilhaAtual?.observacoes">
-          <ion-icon name="information-circle"></ion-icon>
-          <p>{{ armadilhaAtual.observacoes }}</p>
-        </div>
-
-        <div class="action-buttons">
-          <ion-button 
-            expand="block" 
-            color="primary" 
-            size="large"
-            (click)="tirarFoto()"
-            [disabled]="!!fotoAtual">
-            <ion-icon name="camera" slot="start"></ion-icon>
-            {{ fotoAtual ? 'Foto Tirada' : 'Tirar Foto' }}
-          </ion-button>
-
-          <div class="secondary-actions">
-            <ion-button 
-              expand="block" 
-              fill="outline" 
-              color="warning"
-              (click)="pularArmadilha()">
-              <ion-icon name="play-skip-forward" slot="start"></ion-icon>
-              Pular
-            </ion-button>
-
-            <ion-button 
-              expand="block" 
-              color="success"
-              (click)="proximaArmadilha()"
-              [disabled]="!fotoAtual">
-              <ion-icon name="arrow-forward" slot="end"></ion-icon>
-              Próxima
-            </ion-button>
-          </div>
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </div>
-
-  <div class="resumo-final" *ngIf="vistoriaFinalizada">
-    <div class="resumo-header">
-      <ion-icon name="checkmark-circle" color="success"></ion-icon>
-      <h2>Vistoria Concluída!</h2>
-      <p>Confira o resumo abaixo</p>
-    </div>
-
-    <ion-card class="stats-card">
-      <ion-card-content>
-        <div class="stat-item">
-          <div class="stat-icon success">
-            <ion-icon name="camera"></ion-icon>
-          </div>
-          <div class="stat-info">
-            <h3>{{ fotosTiradas }}</h3>
-            <p>Fotos Tiradas</p>
-          </div>
-        </div>
-
-        <div class="stat-item">
-          <div class="stat-icon warning">
-            <ion-icon name="alert-circle"></ion-icon>
-          </div>
-          <div class="stat-info">
-            <h3>{{ fotosNaoTiradas }}</h3>
-            <p>Não Fotografadas</p>
-          </div>
-        </div>
-      </ion-card-content>
-    </ion-card>
-
-    <div class="lista-resumo">
-      <h3>Detalhes da Vistoria</h3>
-      
-      <ion-list>
-        <ion-item *ngFor="let item of resumoVistoria" [class.fotografada]="item.fotografada">
-          <ion-icon 
-            [name]="item.fotografada ? 'checkmark-circle' : 'close-circle'" 
-            [color]="item.fotografada ? 'success' : 'danger'"
-            slot="start">
-          </ion-icon>
-          <ion-label>
-            <h2>{{ item.armadilha.nome }}</h2>
-            <p *ngIf="item.armadilha.observacoes">{{ item.armadilha.observacoes }}</p>
-          </ion-label>
-          <ion-badge [color]="item.fotografada ? 'success' : 'danger'" slot="end">
-            {{ item.fotografada ? 'Fotografada' : 'Pulada' }}
-          </ion-badge>
-        </ion-item>
-      </ion-list>
-    </div>
-
-    <div class="final-actions">
-      <ion-button 
-        expand="block" 
-        color="success" 
-        size="large"
-        (click)="finalizarVistoria()">
-        <ion-icon name="checkmark" slot="start"></ion-icon>
-        Finalizar
-      </ion-button>
-
-      <ion-button 
-        expand="block" 
-        fill="outline" 
-        color="primary"
-        (click)="refazerVistoria()">
-        <ion-icon name="refresh" slot="start"></ion-icon>
-        Refazer Vistoria
-      </ion-button>
-    </div>
-  </div>
-</ion-content>
-  `,
-  styles: [`
-.vistoria-content { --background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
-.progress-section { padding: 20px; background: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
-.progress-section .progress-info { text-align: center; margin-bottom: 16px; }
-.progress-section .progress-info h3 { margin: 0 0 8px 0; color: #2e7d32; font-size: 20px; font-weight: 700; }
-.progress-section .progress-info p { margin: 0; color: #666; font-size: 14px; font-weight: 600; }
-.progress-section .progress-bar { height: 8px; background: #e0e0e0; border-radius: 10px; overflow: hidden; }
-.progress-section .progress-bar .progress-fill { height: 100%; background: linear-gradient(90deg, #43a047 0%, #66bb6a 100%); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
-.armadilha-atual { padding: 20px; }
-.armadilha-atual .armadilha-card { margin: 0; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); border-radius: 20px; overflow: hidden; }
-.armadilha-atual .armadilha-card ion-card-header { background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%); padding: 20px; }
-.armadilha-atual .armadilha-card ion-card-title { color: white; font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
-.armadilha-atual .armadilha-card ion-card-title ion-icon { font-size: 28px; }
-.armadilha-atual .armadilha-card ion-card-content { padding: 24px; }
-.foto-preview { position: relative; width: 100%; height: 300px; border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
-.foto-preview img { width: 100%; height: 100%; object-fit: cover; }
-.foto-preview .foto-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(67, 160, 71, 0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
-.foto-preview .foto-overlay ion-icon { font-size: 64px; margin-bottom: 12px; }
-.foto-preview .foto-overlay p { color: white; font-size: 18px; font-weight: 600; margin: 0; }
-.sem-foto { height: 300px; background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; border: 3px dashed #e0e0e0; }
-.sem-foto ion-icon { font-size: 80px; color: #43a047; opacity: 0.5; margin-bottom: 16px; }
-.sem-foto p { color: #999; font-size: 16px; font-weight: 600; margin: 0; }
-.observacoes { background: #fff3cd; padding: 16px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #fbc02d; display: flex; gap: 12px; }
-.observacoes ion-icon { font-size: 24px; color: #f57f17; flex-shrink: 0; }
-.observacoes p { margin: 0; color: #666; font-size: 14px; line-height: 1.5; }
-.action-buttons ion-button { margin-bottom: 12px; height: 56px; font-weight: 600; --border-radius: 12px; }
-.action-buttons .secondary-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
-.action-buttons .secondary-actions ion-button { margin: 0; height: 48px; }
-.resumo-final { padding: 20px; }
-.resumo-final .resumo-header { text-align: center; padding: 40px 20px; animation: fadeInScale 0.5s ease; }
-.resumo-final .resumo-header ion-icon { font-size: 80px; margin-bottom: 16px; }
-.resumo-final .resumo-header h2 { margin: 0 0 8px 0; color: #2e7d32; font-size: 28px; font-weight: 700; }
-.resumo-final .resumo-header p { margin: 0; color: #666; font-size: 16px; }
-.resumo-final .stats-card { margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); border-radius: 16px; }
-.resumo-final .stats-card ion-card-content { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.resumo-final .stats-card .stat-item { display: flex; align-items: center; gap: 16px; }
-.resumo-final .stats-card .stat-item .stat-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-.resumo-final .stats-card .stat-item .stat-icon ion-icon { font-size: 28px; color: white; }
-.resumo-final .stats-card .stat-item .stat-icon.success { background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%); }
-.resumo-final .stats-card .stat-item .stat-icon.warning { background: linear-gradient(135deg, #fbc02d 0%, #fdd835 100%); }
-.resumo-final .stats-card .stat-item .stat-info h3 { margin: 0 0 4px 0; font-size: 32px; font-weight: 700; color: #2e7d32; }
-.resumo-final .stats-card .stat-item .stat-info p { margin: 0; font-size: 13px; color: #666; font-weight: 600; }
-.resumo-final .lista-resumo { margin-bottom: 24px; }
-.resumo-final .lista-resumo h3 { margin: 0 0 16px 0; color: #2e7d32; font-size: 18px; font-weight: 700; padding: 0 4px; }
-.resumo-final .lista-resumo ion-list { background: transparent; padding: 0; }
-.resumo-final .lista-resumo ion-item { --background: white; --border-radius: 12px; --padding-start: 16px; --padding-end: 16px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
-.resumo-final .lista-resumo ion-item.fotografada { --background: #e8f5e9; }
-.resumo-final .lista-resumo ion-item ion-icon { font-size: 24px; margin-right: 12px; }
-.resumo-final .lista-resumo ion-item ion-label h2 { color: #2e7d32; font-weight: 600; font-size: 16px; }
-.resumo-final .lista-resumo ion-item ion-label p { color: #666; font-size: 13px; margin-top: 4px; }
-.resumo-final .lista-resumo ion-item ion-badge { font-size: 11px; font-weight: 600; padding: 6px 12px; }
-.resumo-final .final-actions ion-button { margin-bottom: 12px; height: 52px; font-weight: 600; --border-radius: 12px; }
-.resumo-final .final-actions ion-button:last-child { margin-bottom: 0; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-@media (max-width: 480px) {
-  .resumo-final .stats-card ion-card-content { grid-template-columns: 1fr; }
-  .foto-preview, .sem-foto { height: 250px; }
-}
-  `]
-})
-class VistoriaModalComponent implements OnInit {
-  campo!: Campo;
-  armadilhas: Armadilha[] = [];
-  indiceAtual = 0;
-  armadilhaAtual?: Armadilha;
-  fotoAtual?: string;
-  vistoriaFinalizada = false;
-  resumoVistoria: any[] = [];
-  fotosTiradas = 0;
-  fotosNaoTiradas = 0;
-
-  constructor(
-    private modalController: ModalController,
-    private alertController: AlertController,
-    private dataService: DataService
-  ) {}
-
-  ngOnInit() {
-    this.armadilhas = [...this.campo.armadilhas];
-    if (this.armadilhas.length > 0) {
-      this.armadilhaAtual = this.armadilhas[0];
-    }
-  }
-
-  get progresso(): number {
-    if (this.armadilhas.length === 0) return 0;
-    return ((this.indiceAtual + 1) / this.armadilhas.length) * 100;
-  }
-
-  async tirarFoto() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 80,
-        allowEditing: false,
-        resultType: CameraResultType.DataUrl,
-        source: CameraSource.Camera
-      });
-
-      if (image.dataUrl) {
-        this.fotoAtual = image.dataUrl;
-        
-        if (this.armadilhaAtual) {
-          this.dataService.adicionarFoto(
-            this.campo.id,
-            this.armadilhaAtual.id,
-            image.dataUrl
-          );
-        }
-      }
-    } catch (error) {
-      console.error('Erro ao tirar foto:', error);
-      const alert = await this.alertController.create({
-        header: 'Erro',
-        message: 'Não foi possível acessar a câmera.',
-        buttons: ['OK']
-      });
-      await alert.present();
-    }
-  }
-
-  proximaArmadilha() {
-    if (!this.armadilhaAtual) return;
-    this.resumoVistoria.push({ armadilha: this.armadilhaAtual, fotografada: true, foto: this.fotoAtual });
-    this.fotosTiradas++;
-    this.avancar();
-  }
-
-  pularArmadilha() {
-    if (!this.armadilhaAtual) return;
-    this.resumoVistoria.push({ armadilha: this.armadilhaAtual, fotografada: false });
-    this.fotosNaoTiradas++;
-    this.avancar();
-  }
-
-  private avancar() {
-    this.fotoAtual = undefined;
-    this.indiceAtual++;
-    if (this.indiceAtual >= this.armadilhas.length) {
-      this.vistoriaFinalizada = true;
-    } else {
-      this.armadilhaAtual = this.armadilhas[this.indiceAtual];
-    }
-  }
-
-  refazerVistoria() {
-    this.indiceAtual = 0;
-    this.fotoAtual = undefined;
-    this.vistoriaFinalizada = false;
-    this.resumoVistoria = [];
-    this.fotosTiradas = 0;
-    this.fotosNaoTiradas = 0;
-    this.armadilhaAtual = this.armadilhas[0];
-  }
-
-  finalizarVistoria() {
-    this.modalController.dismiss({
-      concluida: true,
-      fotosTiradas: this.fotosTiradas,
-      fotosNaoTiradas: this.fotosNaoTiradas
-    });
-  }
-
-  async fecharVistoria() {
-    if (this.resumoVistoria.length > 0 && !this.vistoriaFinalizada) {
-      const alert = await this.alertController.create({
-        header: 'Confirmar Saída',
-        message: 'Você já fotografou algumas armadilhas. Deseja realmente sair?',
-        buttons: [
-          { text: 'Continuar Vistoria', role: 'cancel' },
-          { text: 'Sair', role: 'destructive', handler: () => { this.modalController.dismiss(); } }
-        ]
-      });
-      await alert.present();
-    } else {
-      this.modalController.dismiss();
-    }
-  }
-}
-
 @Component({
   selector: 'app-campo-detail',
   templateUrl: './campo-detail.page.html',
@@ -399,9 +56,15 @@ export class CampoDetailPage implements OnInit {
       return;
     }
 
+    // Criar modal de vistoria manualmente usando HTML
+    const modalHtml = await this.criarModalVistoria();
+    
     const modal = await this.modalController.create({
       component: VistoriaModalComponent,
-      componentProps: { campo: this.campo },
+      componentProps: { 
+        campo: this.campo,
+        dataService: this.dataService 
+      },
       cssClass: 'vistoria-modal'
     });
 
@@ -419,6 +82,11 @@ export class CampoDetailPage implements OnInit {
       });
       await alert.present();
     }
+  }
+
+  private async criarModalVistoria(): Promise<void> {
+    // Esta função agora apenas serve como placeholder
+    // O modal será criado pelo VistoriaModalComponent
   }
 
   async novaArmadilha() {
@@ -605,5 +273,371 @@ export class CampoDetailPage implements OnInit {
 
   voltar() {
     this.navController.back();
+  }
+}
+
+// Componente do Modal de Vistoria
+@Component({
+  selector: 'app-vistoria-modal',
+  template: `
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="fecharVistoria()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Vistoria Rápida</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="vistoria-content">
+  <div class="progress-section">
+    <div class="progress-info">
+      <h3>{{ campo?.nome }}</h3>
+      <p>{{ indiceAtual + 1 }} de {{ armadilhas.length }} armadilhas</p>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width]="progresso + '%'"></div>
+    </div>
+  </div>
+
+  <div class="armadilha-atual" *ngIf="!vistoriaFinalizada">
+    <ion-card class="armadilha-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="flag"></ion-icon>
+          {{ armadilhaAtual?.nome }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="foto-preview" *ngIf="fotoAtual">
+          <img [src]="fotoAtual" alt="Preview">
+          <div class="foto-overlay">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <p>Foto capturada!</p>
+          </div>
+        </div>
+
+        <div class="sem-foto" *ngIf="!fotoAtual">
+          <ion-icon name="camera-outline"></ion-icon>
+          <p>Pronto para fotografar</p>
+        </div>
+
+        <div class="observacoes" *ngIf="armadilhaAtual?.observacoes">
+          <ion-icon name="information-circle"></ion-icon>
+          <p>{{ armadilhaAtual?.observacoes }}</p>
+        </div>
+
+        <div class="action-buttons">
+          <ion-button 
+            expand="block" 
+            color="primary" 
+            size="large"
+            (click)="tirarFoto()"
+            [disabled]="!!fotoAtual">
+            <ion-icon name="camera" slot="start"></ion-icon>
+            {{ fotoAtual ? 'Foto Tirada' : 'Tirar Foto' }}
+          </ion-button>
+
+          <div class="secondary-actions">
+            <ion-button 
+              expand="block" 
+              fill="outline" 
+              color="warning"
+              (click)="pularArmadilha()">
+              <ion-icon name="play-skip-forward" slot="start"></ion-icon>
+              Pular
+            </ion-button>
+
+            <ion-button 
+              expand="block" 
+              color="success"
+              (click)="proximaArmadilha()"
+              [disabled]="!fotoAtual">
+              <ion-icon name="arrow-forward" slot="end"></ion-icon>
+              Próxima
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div class="resumo-final" *ngIf="vistoriaFinalizada">
+    <div class="resumo-header">
+      <ion-icon name="checkmark-circle" color="success"></ion-icon>
+      <h2>Vistoria Concluída!</h2>
+      <p>Confira o resumo abaixo</p>
+    </div>
+
+    <ion-card class="stats-card">
+      <ion-card-content>
+        <div class="stat-item">
+          <div class="stat-icon success">
+            <ion-icon name="camera"></ion-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ fotosTiradas }}</h3>
+            <p>Fotos Tiradas</p>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon warning">
+            <ion-icon name="alert-circle"></ion-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ fotosNaoTiradas }}</h3>
+            <p>Não Fotografadas</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="lista-resumo">
+      <h3>Detalhes da Vistoria</h3>
+      
+      <ion-list>
+        <ion-item *ngFor="let item of resumoVistoria" [class.fotografada]="item.fotografada">
+          <ion-icon 
+            [name]="item.fotografada ? 'checkmark-circle' : 'close-circle'" 
+            [color]="item.fotografada ? 'success' : 'danger'"
+            slot="start">
+          </ion-icon>
+          <ion-label>
+            <h2>{{ item.armadilha.nome }}</h2>
+            <p *ngIf="item.armadilha.observacoes">{{ item.armadilha.observacoes }}</p>
+          </ion-label>
+          <ion-badge [color]="item.fotografada ? 'success' : 'danger'" slot="end">
+            {{ item.fotografada ? 'Fotografada' : 'Pulada' }}
+          </ion-badge>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div class="final-actions">
+      <ion-button 
+        expand="block" 
+        color="success" 
+        size="large"
+        (click)="finalizarVistoria()">
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        Finalizar
+      </ion-button>
+
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        color="primary"
+        (click)="refazerVistoria()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Refazer Vistoria
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
+  `,
+  styles: [`
+.vistoria-content { --background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
+.progress-section { padding: 20px; background: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+.progress-section .progress-info { text-align: center; margin-bottom: 16px; }
+.progress-section .progress-info h3 { margin: 0 0 8px 0; color: #2e7d32; font-size: 20px; font-weight: 700; }
+.progress-section .progress-info p { margin: 0; color: #666; font-size: 14px; font-weight: 600; }
+.progress-section .progress-bar { height: 8px; background: #e0e0e0; border-radius: 10px; overflow: hidden; }
+.progress-section .progress-bar .progress-fill { height: 100%; background: linear-gradient(90deg, #43a047 0%, #66bb6a 100%); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
+.armadilha-atual { padding: 20px; }
+.armadilha-atual .armadilha-card { margin: 0; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); border-radius: 20px; overflow: hidden; }
+.armadilha-atual .armadilha-card ion-card-header { background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%); padding: 20px; }
+.armadilha-atual .armadilha-card ion-card-title { color: white; font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+.armadilha-atual .armadilha-card ion-card-title ion-icon { font-size: 28px; }
+.armadilha-atual .armadilha-card ion-card-content { padding: 24px; }
+.foto-preview { position: relative; width: 100%; height: 300px; border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.foto-preview img { width: 100%; height: 100%; object-fit: cover; }
+.foto-preview .foto-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(67, 160, 71, 0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
+.foto-preview .foto-overlay ion-icon { font-size: 64px; margin-bottom: 12px; }
+.foto-preview .foto-overlay p { color: white; font-size: 18px; font-weight: 600; margin: 0; }
+.sem-foto { height: 300px; background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; border: 3px dashed #e0e0e0; }
+.sem-foto ion-icon { font-size: 80px; color: #43a047; opacity: 0.5; margin-bottom: 16px; }
+.sem-foto p { color: #999; font-size: 16px; font-weight: 600; margin: 0; }
+.observacoes { background: #fff3cd; padding: 16px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #fbc02d; display: flex; gap: 12px; }
+.observacoes ion-icon { font-size: 24px; color: #f57f17; flex-shrink: 0; }
+.observacoes p { margin: 0; color: #666; font-size: 14px; line-height: 1.5; }
+.action-buttons ion-button { margin-bottom: 12px; height: 56px; font-weight: 600; --border-radius: 12px; }
+.action-buttons .secondary-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+.action-buttons .secondary-actions ion-button { margin: 0; height: 48px; }
+.resumo-final { padding: 20px; }
+.resumo-final .resumo-header { text-align: center; padding: 40px 20px; animation: fadeInScale 0.5s ease; }
+.resumo-final .resumo-header ion-icon { font-size: 80px; margin-bottom: 16px; }
+.resumo-final .resumo-header h2 { margin: 0 0 8px 0; color: #2e7d32; font-size: 28px; font-weight: 700; }
+.resumo-final .resumo-header p { margin: 0; color: #666; font-size: 16px; }
+.resumo-final .stats-card { margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); border-radius: 16px; }
+.resumo-final .stats-card ion-card-content { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.resumo-final .stats-card .stat-item { display: flex; align-items: center; gap: 16px; }
+.resumo-final .stats-card .stat-item .stat-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.resumo-final .stats-card .stat-item .stat-icon ion-icon { font-size: 28px; color: white; }
+.resumo-final .stats-card .stat-item .stat-icon.success { background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%); }
+.resumo-final .stats-card .stat-item .stat-icon.warning { background: linear-gradient(135deg, #fbc02d 0%, #fdd835 100%); }
+.resumo-final .stats-card .stat-item .stat-info h3 { margin: 0 0 4px 0; font-size: 32px; font-weight: 700; color: #2e7d32; }
+.resumo-final .stats-card .stat-item .stat-info p { margin: 0; font-size: 13px; color: #666; font-weight: 600; }
+.resumo-final .lista-resumo { margin-bottom: 24px; }
+.resumo-final .lista-resumo h3 { margin: 0 0 16px 0; color: #2e7d32; font-size: 18px; font-weight: 700; padding: 0 4px; }
+.resumo-final .lista-resumo ion-list { background: transparent; padding: 0; }
+.resumo-final .lista-resumo ion-item { --background: white; --border-radius: 12px; --padding-start: 16px; --padding-end: 16px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+.resumo-final .lista-resumo ion-item.fotografada { --background: #e8f5e9; }
+.resumo-final .lista-resumo ion-item ion-icon { font-size: 24px; margin-right: 12px; }
+.resumo-final .lista-resumo ion-item ion-label h2 { color: #2e7d32; font-weight: 600; font-size: 16px; }
+.resumo-final .lista-resumo ion-item ion-label p { color: #666; font-size: 13px; margin-top: 4px; }
+.resumo-final .lista-resumo ion-item ion-badge { font-size: 11px; font-weight: 600; padding: 6px 12px; }
+.resumo-final .final-actions ion-button { margin-bottom: 12px; height: 52px; font-weight: 600; --border-radius: 12px; }
+.resumo-final .final-actions ion-button:last-child { margin-bottom: 0; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+@media (max-width: 480px) {
+  .resumo-final .stats-card ion-card-content { grid-template-columns: 1fr; }
+  .foto-preview, .sem-foto { height: 250px; }
+}
+  `],
+  standalone: false
+})
+export class VistoriaModalComponent implements OnInit {
+  campo!: Campo;
+  dataService!: DataService;
+  
+  armadilhas: Armadilha[] = [];
+  indiceAtual = 0;
+  armadilhaAtual?: Armadilha;
+  fotoAtual?: string;
+  
+  vistoriaFinalizada = false;
+  resumoVistoria: any[] = [];
+  
+  fotosTiradas = 0;
+  fotosNaoTiradas = 0;
+
+  constructor(
+    private modalController: ModalController,
+    private alertController: AlertController
+  ) {}
+
+  ngOnInit() {
+    this.armadilhas = [...this.campo.armadilhas];
+    if (this.armadilhas.length > 0) {
+      this.armadilhaAtual = this.armadilhas[0];
+    }
+  }
+
+  get progresso(): number {
+    if (this.armadilhas.length === 0) return 0;
+    return ((this.indiceAtual + 1) / this.armadilhas.length) * 100;
+  }
+
+  async tirarFoto() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 80,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Camera
+      });
+
+      if (image.dataUrl) {
+        this.fotoAtual = image.dataUrl;
+        
+        if (this.armadilhaAtual) {
+          this.dataService.adicionarFoto(
+            this.campo.id,
+            this.armadilhaAtual.id,
+            image.dataUrl
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao tirar foto:', error);
+      const alert = await this.alertController.create({
+        header: 'Erro',
+        message: 'Não foi possível acessar a câmera.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
+  }
+
+  proximaArmadilha() {
+    if (!this.armadilhaAtual) return;
+    
+    // Adicionar ao resumo
+    this.resumoVistoria.push({ 
+      armadilha: this.armadilhaAtual, 
+      fotografada: true, 
+      foto: this.fotoAtual 
+    });
+    this.fotosTiradas++;
+    
+    // Verificar se é a última ANTES de avançar
+    if (this.indiceAtual >= this.armadilhas.length - 1) {
+      this.vistoriaFinalizada = true;
+    } else {
+      this.avancar();
+    }
+  }
+
+  pularArmadilha() {
+    if (!this.armadilhaAtual) return;
+    
+    // Adicionar ao resumo
+    this.resumoVistoria.push({ 
+      armadilha: this.armadilhaAtual, 
+      fotografada: false 
+    });
+    this.fotosNaoTiradas++;
+    
+    // Verificar se é a última ANTES de avançar
+    if (this.indiceAtual >= this.armadilhas.length - 1) {
+      this.vistoriaFinalizada = true;
+    } else {
+      this.avancar();
+    }
+  }
+
+  private avancar() {
+    this.fotoAtual = undefined;
+    this.indiceAtual++;
+    this.armadilhaAtual = this.armadilhas[this.indiceAtual];
+  }
+
+  refazerVistoria() {
+    this.indiceAtual = 0;
+    this.fotoAtual = undefined;
+    this.vistoriaFinalizada = false;
+    this.resumoVistoria = [];
+    this.fotosTiradas = 0;
+    this.fotosNaoTiradas = 0;
+    this.armadilhaAtual = this.armadilhas[0];
+  }
+
+  finalizarVistoria() {
+    this.modalController.dismiss({
+      concluida: true,
+      fotosTiradas: this.fotosTiradas,
+      fotosNaoTiradas: this.fotosNaoTiradas
+    });
+  }
+
+  async fecharVistoria() {
+    if (this.resumoVistoria.length > 0 && !this.vistoriaFinalizada) {
+      const alert = await this.alertController.create({
+        header: 'Confirmar Saída',
+        message: 'Você já fotografou algumas armadilhas. Deseja realmente sair?',
+        buttons: [
+          { text: 'Continuar Vistoria', role: 'cancel' },
+          { text: 'Sair', role: 'destructive', handler: () => { this.modalController.dismiss(); } }
+        ]
+      });
+      await alert.present();
+    } else {
+      this.modalController.dismiss();
+    }
   }
 }

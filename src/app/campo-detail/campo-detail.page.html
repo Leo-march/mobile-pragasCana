@@ -28,19 +28,34 @@
             <span class="label">armadilhas</span>
           </div>
         </div>
+        
+        <!-- Botão de Vistoria Rápida -->
+        <div class="vistoria-section" *ngIf="campo.armadilhas.length > 0">
+          <ion-button 
+            expand="block" 
+            color="success"
+            class="vistoria-button"
+            (click)="iniciarVistoria()">
+            <ion-icon name="camera" slot="start"></ion-icon>
+            Iniciar Vistoria Rápida
+            <ion-icon name="arrow-forward-circle" slot="end"></ion-icon>
+          </ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
 
-    <!-- Mensagem quando não há armadilhas -->
-    <div *ngIf="campo.armadilhas.length === 0" class="empty-state">
-      <ion-icon name="flag-outline"></ion-icon>
-      <h3>Nenhuma armadilha cadastrada</h3>
-      <p>Adicione armadilhas para começar o monitoramento</p>
-      <ion-button expand="block" (click)="novaArmadilha()">
-        <ion-icon name="add" slot="start"></ion-icon>
-        Adicionar Armadilha
-      </ion-button>
-    </div>
+<!-- Mensagem quando não há armadilhas -->
+<div *ngIf="campo.armadilhas.length === 0" class="empty-state">
+  <div class="empty-icon-container">
+    <ion-icon name="flag-outline"></ion-icon>
+  </div>
+  <h3>Nenhuma armadilha cadastrada</h3>
+  <p>Adicione armadilhas para começar o monitoramento</p>
+  <ion-button expand="block" (click)="novaArmadilha()" class="add-armadilha-button">
+    <ion-icon name="add-circle" slot="start"></ion-icon>
+    Adicionar Armadilha
+  </ion-button>
+</div>
 
     <!-- Lista de Armadilhas -->
     <div *ngIf="campo.armadilhas.length > 0" class="armadilhas-grid">

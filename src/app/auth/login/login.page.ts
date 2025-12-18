@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { NavController, AlertController } from '@ionic/angular';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -12,9 +15,17 @@ export class LoginPage implements OnInit {
   senha = '';
   mostrarSenha = false;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private alertCtrl: AlertController,
+    private navController: NavController
+  ) {
+    console.log('🔵 LoginPage: Construtor chamado');
+  }
 
   ngOnInit() {
+    console.log('🔵 LoginPage: ngOnInit chamado');
   }
 
   toggleMostrarSenha() {
@@ -22,11 +33,47 @@ export class LoginPage implements OnInit {
   }
 
   fazerLogin() {
-    // Navega direto para o dashboard (não funcional)
-    this.router.navigate(['/dashboard']);
+    this._doLogin();
+  }
+
+  private async _doLogin() {
+    if (!this.email || !this.senha) {
+      return this.showAlert('Campos inválidos', 'Preencha email e senha.');
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.email)) {
+      return this.showAlert('Email inválido', 'Digite um email válido.');
+    }
+
+    try {
+      const url = `${environment.apiUrl}/usuarios/login`;
+      const resp: any = await this.http.post(url, { email: this.email, senha: this.senha }).toPromise();
+      if (resp && resp.token) {
+        localStorage.setItem('token', resp.token);
+        await this.showAlert('Bem-vindo', 'Login realizado com sucesso.');
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.showAlert('Erro', 'Resposta inesperada do servidor.');
+      }
+    } catch (err: any) {
+      console.error('Erro login:', err);
+      const msg = err?.error?.erro || err?.message || 'Erro ao efetuar login';
+      this.showAlert('Login falhou', msg);
+    }
+  }
+
+  private async showAlert(header: string, message: string) {
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   irParaCadastro() {
+    console.log('🔄 Navegando para /cadastro...');
     this.router.navigate(['/cadastro']);
   }
 }

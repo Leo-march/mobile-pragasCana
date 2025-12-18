@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true" class="dashboard-content" [scrollY]="true">
+<ion-content [fullscreen]="true" class="dashboard-content">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Dashboard</ion-title>
@@ -74,6 +74,7 @@
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
+    
         <!-- Ver Meus Talhões - navega para /campos -->
         <ion-button expand="block" color="success" (click)="navegarParaCampos()" class="action-button">
           <ion-icon name="map" slot="start"></ion-icon>
@@ -81,7 +82,7 @@
         </ion-button>
 
         <!-- Adicionar Novo Talhão - abre modal diretamente -->
-        <ion-button expand="block" color="primary" (click)="adicionarNovoTalhao()" class="action-button mt-8">
+        <ion-button expand="block" color="primary" (click)="adicionarNovoTalhao()" class="action-button">
           <ion-icon name="add-circle" slot="start"></ion-icon>
           Adicionar Novo Talhão
         </ion-button>
@@ -95,8 +96,7 @@
           <ion-icon name="bulb"></ion-icon>
           <h3>Dica do Dia</h3>
         </div>
-        <p>Organize suas armadilhas por talhão e mantenha o registro fotográfico atualizado para um monitoramento
-          eficiente!</p>
+        <p>Organize suas armadilhas por talhão e mantenha o registro fotográfico atualizado para um monitoramento eficiente!</p>
       </ion-card-content>
     </ion-card>
 

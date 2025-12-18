@@ -8,6 +8,14 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'login',
+    loadChildren: () => import('./auth/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'cadastro',
+    loadChildren: () => import('./auth/cadastro/cadastro.module').then( m => m.CadastroPageModule)
+  },
+  {
     path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule)
   },
@@ -18,24 +26,7 @@ const routes: Routes = [
   {
     path: 'campo-detail',
     loadChildren: () => import('./campo-detail/campo-detail.module').then( m => m.CampoDetailPageModule)
-  },
-  {
-    path: 'login',
-    loadChildren: () => import('./auth/login/login.module').then( m => m.LoginPageModule)
-  },
-  {
-    path: 'cadastro',
-    loadChildren: () => import('./auth/cadastro/cadastro.module').then( m => m.CadastroPageModule)
-  },
-  {
-    path: 'login',
-    loadChildren: () => import('./auth/login/login.module').then( m => m.LoginPageModule)
-  },
-  {
-    path: 'cadastro',
-    loadChildren: () => import('./auth/cadastro/cadastro.module').then( m => m.CadastroPageModule)
-  },
-
+  }
 ];
 
 @NgModule({

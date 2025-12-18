@@ -1,3 +1,4 @@
+// src/app/dashboard/dashboard.page.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
@@ -19,17 +20,22 @@ export class DashboardPage implements OnInit {
     private dataService: DataService,
     private router: Router,
     private alertController: AlertController
-  ) { }
+  ) {
+    console.log('📊 DashboardPage: Construtor chamado');
+  }
 
   ngOnInit() {
+    console.log('📊 DashboardPage: ngOnInit chamado');
     this.carregarEstatisticas();
   }
 
   ionViewWillEnter() {
+    console.log('📊 DashboardPage: ionViewWillEnter chamado');
     this.carregarEstatisticas();
   }
 
   carregarEstatisticas() {
+    console.log('📊 Carregando estatísticas...');
     this.fotosFaltando = this.dataService.contarFotosFaltando();
     this.taxaConclusao = this.dataService.calcularTaxaConclusao();
     
@@ -38,9 +44,17 @@ export class DashboardPage implements OnInit {
     this.totalArmadilhas = campos.reduce((total, campo) => 
       total + campo.armadilhas.length, 0
     );
+    
+    console.log('📊 Estatísticas carregadas:', {
+      fotosFaltando: this.fotosFaltando,
+      taxaConclusao: this.taxaConclusao,
+      totalCampos: this.totalCampos,
+      totalArmadilhas: this.totalArmadilhas
+    });
   }
 
   navegarParaCampos() {
+    console.log('🔄 Navegando para /campos...');
     this.router.navigate(['/campos']);
   }
 
@@ -48,7 +62,6 @@ export class DashboardPage implements OnInit {
     const campos = this.dataService.getCampos();
     const detalhes: { nome: string; faltando: number }[] = [];
     
-    // Calcular fotos faltando por talhão
     campos.forEach(campo => {
       const fotosFaltando = campo.armadilhas.filter(a => !a.foto).length;
       if (fotosFaltando > 0) {
@@ -60,7 +73,6 @@ export class DashboardPage implements OnInit {
     });
 
     if (detalhes.length === 0) {
-      // Nenhuma foto faltando
       const alert = await this.alertController.create({
         header: '✅ Parabéns!',
         message: 'Todas as armadilhas já possuem fotos registradas!',
@@ -76,10 +88,9 @@ export class DashboardPage implements OnInit {
       return;
     }
 
-    // Criar mensagem de texto simples formatada
     let mensagem = `Total: ${this.fotosFaltando} ${this.fotosFaltando === 1 ? 'foto faltando' : 'fotos faltando'}\n\n`;
     
-    detalhes.forEach((item, index) => {
+    detalhes.forEach((item) => {
       const texto = item.faltando === 1 ? 'foto' : 'fotos';
       mensagem += `📍 ${item.nome}\n   ${item.faltando} ${texto} faltando\n\n`;
     });
