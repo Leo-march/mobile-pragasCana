@@ -4,9 +4,6 @@
     <span>Voltar</span>
   </button>
   <h1 class="header-title">Meus Talhões</h1>
-  <button class="header-add-button" (click)="novoCampo()">
-    <ion-icon name="add"></ion-icon>
-  </button>
 </div>
 
 <ion-content class="campos-content" [scrollY]="true">
@@ -18,11 +15,7 @@
         <ion-icon name="map-outline"></ion-icon>
       </div>
       <h2>Nenhum talhão cadastrado</h2>
-      <p>Comece criando seu primeiro talhão!</p>
-      <ion-button expand="block" (click)="novoCampo()" class="create-button">
-        <ion-icon name="add-circle" slot="start"></ion-icon>
-        Criar Primeiro Talhão
-      </ion-button>
+      <p>Peça para seu administrador criar um talhão.</p>
     </div>
 
     <!-- Lista de campos -->

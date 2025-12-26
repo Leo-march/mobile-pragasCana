@@ -25,9 +25,15 @@ export class CampoDetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async params => {
       this.campoId = params['id'];
-      this.carregarCampo();
+      await this.carregarCampo();
+      // se vier com ?start=1, iniciar vistoria automaticamente
+      if (params['start'] === '1') {
+        setTimeout(() => {
+          this.iniciarVistoria();
+        }, 200);
+      }
     });
   }
 
@@ -35,7 +41,7 @@ export class CampoDetailPage implements OnInit {
     this.carregarCampo();
   }
 
-  carregarCampo() {
+  async carregarCampo() {
     if (this.campoId) {
       this.campo = this.dataService.getCampo(this.campoId);
       if (!this.campo) {
@@ -293,8 +299,8 @@ export class CampoDetailPage implements OnInit {
 
 <ion-content class="vistoria-content">
   <div class="progress-section">
-    <div class="progress-info">
-      <h3>{{ campo?.nome }}</h3>
+      <div class="progress-info">
+      <h3>{{ campo.nome }}</h3>
       <p>{{ indiceAtual + 1 }} de {{ armadilhas.length }} armadilhas</p>
     </div>
     <div class="progress-bar">

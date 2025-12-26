@@ -1,8 +1,9 @@
 // src/app/dashboard/dashboard.page.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -19,9 +20,49 @@ export class DashboardPage implements OnInit {
   constructor(
     private dataService: DataService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private navController: NavController
   ) {
     console.log('📊 DashboardPage: Construtor chamado');
+  }
+
+  async iniciarVistoriaRapida() {
+    const campos = this.dataService.getCampos();
+    if (!campos || campos.length === 0) {
+      const alert = await this.alertController.create({
+        header: 'Sem Talhões',
+        message: 'Nenhum talhão cadastrado para iniciar a vistoria.',
+        buttons: ['OK']
+      });
+      await alert.present();
+      return;
+    }
+
+    const inputs: any[] = campos.map(c => ({
+      name: String(c.id),
+      type: 'radio',
+      label: c.nome,
+      value: String(c.id)
+    }));
+
+    const alert = await this.alertController.create({
+      header: 'Selecionar Talhão',
+      inputs,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Iniciar',
+          handler: (value) => {
+            if (!value) return false;
+            // navegar para a página de detalhe e instruir para iniciar a vistoria
+            this.router.navigate(['/campo-detail'], { queryParams: { id: value, start: '1' } });
+            return true;
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   ngOnInit() {

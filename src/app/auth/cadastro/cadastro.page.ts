@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -13,6 +14,7 @@ import { environment } from '../../../environments/environment';
 export class CadastroPage implements OnInit {
   nome = '';
   email = '';
+  fazenda = '';
   telefone = '';
   senha = '';
   confirmarSenha = '';
@@ -24,6 +26,7 @@ export class CadastroPage implements OnInit {
     private navController: NavController,
     private http: HttpClient,
     private alertCtrl: AlertController
+    , private tokenService: TokenService
   ) {
     console.log('🟢 CadastroPage: Construtor chamado');
   }
@@ -46,7 +49,7 @@ export class CadastroPage implements OnInit {
 
   private async _doCadastro() {
     // validações básicas
-    if (!this.nome || !this.email || !this.senha || !this.confirmarSenha) {
+    if (!this.nome || !this.email || !this.telefone || !this.senha || !this.confirmarSenha || !this.fazenda) {
       return this.showAlert('Campos inválidos', 'Preencha todos os campos obrigatórios.');
     }
 
@@ -66,7 +69,9 @@ export class CadastroPage implements OnInit {
     const payload = {
       nome: this.nome,
       email: this.email,
-      senha: this.senha
+      telefone: this.telefone,
+      senha: this.senha,
+      fazenda: this.fazenda
     };
 
     try {
@@ -78,7 +83,7 @@ export class CadastroPage implements OnInit {
       const loginUrl = `${environment.apiUrl}/usuarios/login`;
       const loginResp: any = await this.http.post(loginUrl, { email: this.email, senha: this.senha }).toPromise();
       if (loginResp && loginResp.token) {
-        localStorage.setItem('token', loginResp.token);
+        await this.tokenService.setToken(loginResp.token);
       }
 
       await this.showAlert('Conta criada', 'Cadastro realizado com sucesso.');

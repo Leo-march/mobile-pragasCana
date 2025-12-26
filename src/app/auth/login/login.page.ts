@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { NavController, AlertController } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginPage implements OnInit {
     private http: HttpClient,
     private alertCtrl: AlertController,
     private navController: NavController
+    , private tokenService: TokenService
   ) {
     console.log('🔵 LoginPage: Construtor chamado');
   }
@@ -50,7 +52,7 @@ export class LoginPage implements OnInit {
       const url = `${environment.apiUrl}/usuarios/login`;
       const resp: any = await this.http.post(url, { email: this.email, senha: this.senha }).toPromise();
       if (resp && resp.token) {
-        localStorage.setItem('token', resp.token);
+        await this.tokenService.setToken(resp.token);
         await this.showAlert('Bem-vindo', 'Login realizado com sucesso.');
         this.router.navigate(['/dashboard']);
       } else {

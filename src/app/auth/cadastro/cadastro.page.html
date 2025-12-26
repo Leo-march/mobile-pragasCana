@@ -48,6 +48,18 @@
             required>
         </div>
 
+        <!-- Campo Fazenda -->
+        <div class="input-group">
+          <ion-icon name="location-outline" class="input-icon"></ion-icon>
+          <input 
+            type="text" 
+            [(ngModel)]="fazenda" 
+            name="fazenda"
+            placeholder="Fazenda"
+            class="custom-input"
+            required>
+        </div>
+
         <!-- Campo Telefone -->
         <div class="input-group">
           <ion-icon name="call-outline" class="input-icon"></ion-icon>
@@ -55,8 +67,9 @@
             type="tel" 
             [(ngModel)]="telefone" 
             name="telefone"
-            placeholder="Telefone (opcional)"
-            class="custom-input">
+            placeholder="Telefone"
+            class="custom-input"
+            required>
         </div>
 
         <!-- Campo Senha -->

@@ -21,6 +21,18 @@ export interface TalhaoAPI {
   center?: [number, number];
   boundary?: any;
   pragas?: any;
+  armadilhas?: ArmadilhaAPI[];
+}
+
+export interface ArmadilhaAPI {
+  id: number;
+  nome: string;
+  foto?: string | null;
+  dataFoto?: string | null;
+  observacoes?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  criadoEm?: string;
 }
 
 export interface CriarUsuarioDTO {
@@ -55,23 +67,41 @@ export class ApiService {
 
   // ===== TALHÕES =====
   
+  private getAuthHeaders(): { headers?: HttpHeaders } {
+    const token = localStorage.getItem('token');
+    if (token) {
+      return { headers: new HttpHeaders({ 'Authorization': `Bearer ${token}` }) };
+    }
+    return {};
+  }
+
   listarTalhoes(): Observable<TalhaoAPI[]> {
-    return this.http.get<TalhaoAPI[]>(`${this.baseUrl}/talhoes`);
+    return this.http.get<TalhaoAPI[]>(`${this.baseUrl}/talhoes`, this.getAuthHeaders());
   }
 
   obterTalhao(id: number): Observable<TalhaoAPI> {
-    return this.http.get<TalhaoAPI>(`${this.baseUrl}/talhoes/${id}`);
+    return this.http.get<TalhaoAPI>(`${this.baseUrl}/talhoes/${id}`, this.getAuthHeaders());
   }
 
   criarTalhao(dados: CriarTalhaoDTO): Observable<TalhaoAPI> {
-    return this.http.post<TalhaoAPI>(`${this.baseUrl}/talhoes`, dados);
+    return this.http.post<TalhaoAPI>(`${this.baseUrl}/talhoes`, dados, this.getAuthHeaders());
+  }
+
+  // Criar armadilha em um talhão
+  criarArmadilha(talhaoId: number, dados: { nome: string; observacao?: string; latitude?: number; longitude?: number }): Observable<ArmadilhaAPI> {
+    return this.http.post<ArmadilhaAPI>(`${this.baseUrl}/talhoes/${talhaoId}/armadilhas`, dados, this.getAuthHeaders());
   }
 
   atualizarTalhao(id: number, dados: Partial<CriarTalhaoDTO>): Observable<TalhaoAPI> {
-    return this.http.put<TalhaoAPI>(`${this.baseUrl}/talhoes/${id}`, dados);
+    return this.http.put<TalhaoAPI>(`${this.baseUrl}/talhoes/${id}`, dados, this.getAuthHeaders());
   }
 
   deletarTalhao(id: number): Observable<{ mensagem: string }> {
-    return this.http.delete<{ mensagem: string }>(`${this.baseUrl}/talhoes/${id}`);
+    return this.http.delete<{ mensagem: string }>(`${this.baseUrl}/talhoes/${id}`, this.getAuthHeaders());
+  }
+
+  // Upload de foto para armadilha (envia data URL base64)
+  uploadArmadilhaFoto(talhaoId: number, armadilhaId: number, dataUrl: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/talhoes/${talhaoId}/armadilhas/${armadilhaId}/foto`, { dataUrl }, this.getAuthHeaders());
   }
 }

@@ -16,7 +16,24 @@
         <p>Aqui está o resumo de hoje</p>
       </ion-card-content>
     </ion-card>
+    <!-- Ações Rápidas -->
+    <ion-card class="activity-card animate-slide-up-delay">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="flash"></ion-icon>
+          Ações Rápidas
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
 
+        <!-- Iniciar Vistoria Rápida -->
+        <ion-button expand="block" color="tertiary" (click)="iniciarVistoriaRapida()" class="action-button">
+          <ion-icon name="play-circle" slot="start"></ion-icon>
+          Iniciar Vistoria
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+    
     <!-- Cards de Estatísticas -->
     <div class="stats-grid animate-slide-up">
       <!-- Card Fotos Faltando - COM clique -->
@@ -65,29 +82,6 @@
       </ion-card>
     </div>
 
-    <!-- Ações Rápidas -->
-    <ion-card class="activity-card animate-slide-up-delay">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="flash"></ion-icon>
-          Ações Rápidas
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-    
-        <!-- Ver Meus Talhões - navega para /campos -->
-        <ion-button expand="block" color="success" (click)="navegarParaCampos()" class="action-button">
-          <ion-icon name="map" slot="start"></ion-icon>
-          Ver Meus Talhões
-        </ion-button>
-
-        <!-- Adicionar Novo Talhão - abre modal diretamente -->
-        <ion-button expand="block" color="primary" (click)="adicionarNovoTalhao()" class="action-button">
-          <ion-icon name="add-circle" slot="start"></ion-icon>
-          Adicionar Novo Talhão
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
 
     <!-- Informações -->
     <ion-card class="info-card animate-slide-up-delay2">
