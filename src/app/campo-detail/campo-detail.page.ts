@@ -299,7 +299,7 @@ export class CampoDetailPage implements OnInit {
 
 <ion-content class="vistoria-content">
   <div class="progress-section">
-      <div class="progress-info">
+    <div class="progress-info">
       <h3>{{ campo.nome }}</h3>
       <p>{{ indiceAtual + 1 }} de {{ armadilhas.length }} armadilhas</p>
     </div>
@@ -308,143 +308,145 @@ export class CampoDetailPage implements OnInit {
     </div>
   </div>
 
-  <div class="armadilha-atual" *ngIf="!vistoriaFinalizada">
-    <ion-card class="armadilha-card">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="flag"></ion-icon>
-          {{ armadilhaAtual?.nome }}
-        </ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <div class="foto-preview" *ngIf="fotoAtual">
-          <img [src]="fotoAtual" alt="Preview">
-          <div class="foto-overlay">
-            <ion-icon name="checkmark-circle" color="success"></ion-icon>
-            <p>Foto capturada!</p>
-          </div>
-        </div>
-
-        <div class="sem-foto" *ngIf="!fotoAtual">
-          <ion-icon name="camera-outline"></ion-icon>
-          <p>Pronto para fotografar</p>
-        </div>
-
-        <div class="observacoes" *ngIf="armadilhaAtual?.observacoes">
-          <ion-icon name="information-circle"></ion-icon>
-          <p>{{ armadilhaAtual?.observacoes }}</p>
-        </div>
-
-        <div class="action-buttons">
-          <ion-button 
-            expand="block" 
-            color="primary" 
-            size="large"
-            (click)="tirarFoto()"
-            [disabled]="!!fotoAtual">
-            <ion-icon name="camera" slot="start"></ion-icon>
-            {{ fotoAtual ? 'Foto Tirada' : 'Tirar Foto' }}
-          </ion-button>
-
-          <div class="secondary-actions">
-            <ion-button 
-              expand="block" 
-              fill="outline" 
-              color="warning"
-              (click)="pularArmadilha()">
-              <ion-icon name="play-skip-forward" slot="start"></ion-icon>
-              Pular
+  @if (!vistoriaFinalizada) {
+    <div class="armadilha-atual">
+      <ion-card class="armadilha-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="flag"></ion-icon>
+            {{ armadilhaAtual?.nome }}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          @if (fotoAtual) {
+            <div class="foto-preview">
+              <img [src]="fotoAtual" alt="Preview">
+              <div class="foto-overlay">
+                <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                <p>Foto capturada!</p>
+              </div>
+            </div>
+          }
+          @if (!fotoAtual) {
+            <div class="sem-foto">
+              <ion-icon name="camera-outline"></ion-icon>
+              <p>Pronto para fotografar</p>
+            </div>
+          }
+          @if (armadilhaAtual?.observacoes) {
+            <div class="observacoes">
+              <ion-icon name="information-circle"></ion-icon>
+              <p>{{ armadilhaAtual?.observacoes }}</p>
+            </div>
+          }
+          <div class="action-buttons">
+            <ion-button
+              expand="block"
+              color="primary"
+              size="large"
+              (click)="tirarFoto()"
+              [disabled]="!!fotoAtual">
+              <ion-icon name="camera" slot="start"></ion-icon>
+              {{ fotoAtual ? 'Foto Tirada' : 'Tirar Foto' }}
             </ion-button>
-
-            <ion-button 
-              expand="block" 
-              color="success"
-              (click)="proximaArmadilha()"
-              [disabled]="!fotoAtual">
-              <ion-icon name="arrow-forward" slot="end"></ion-icon>
-              Próxima
-            </ion-button>
+            <div class="secondary-actions">
+              <ion-button
+                expand="block"
+                fill="outline"
+                color="warning"
+                (click)="pularArmadilha()">
+                <ion-icon name="play-skip-forward" slot="start"></ion-icon>
+                Pular
+              </ion-button>
+              <ion-button
+                expand="block"
+                color="success"
+                (click)="proximaArmadilha()"
+                [disabled]="!fotoAtual">
+                <ion-icon name="arrow-forward" slot="end"></ion-icon>
+                Próxima
+              </ion-button>
+            </div>
           </div>
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </div>
-
-  <div class="resumo-final" *ngIf="vistoriaFinalizada">
-    <div class="resumo-header">
-      <ion-icon name="checkmark-circle" color="success"></ion-icon>
-      <h2>Vistoria Concluída!</h2>
-      <p>Confira o resumo abaixo</p>
+        </ion-card-content>
+      </ion-card>
     </div>
+  }
 
-    <ion-card class="stats-card">
-      <ion-card-content>
-        <div class="stat-item">
-          <div class="stat-icon success">
-            <ion-icon name="camera"></ion-icon>
+  @if (vistoriaFinalizada) {
+    <div class="resumo-final">
+      <div class="resumo-header">
+        <ion-icon name="checkmark-circle" color="success"></ion-icon>
+        <h2>Vistoria Concluída!</h2>
+        <p>Confira o resumo abaixo</p>
+      </div>
+      <ion-card class="stats-card">
+        <ion-card-content>
+          <div class="stat-item">
+            <div class="stat-icon success">
+              <ion-icon name="camera"></ion-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ fotosTiradas }}</h3>
+              <p>Fotos Tiradas</p>
+            </div>
           </div>
-          <div class="stat-info">
-            <h3>{{ fotosTiradas }}</h3>
-            <p>Fotos Tiradas</p>
+          <div class="stat-item">
+            <div class="stat-icon warning">
+              <ion-icon name="alert-circle"></ion-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ fotosNaoTiradas }}</h3>
+              <p>Não Fotografadas</p>
+            </div>
           </div>
-        </div>
-
-        <div class="stat-item">
-          <div class="stat-icon warning">
-            <ion-icon name="alert-circle"></ion-icon>
-          </div>
-          <div class="stat-info">
-            <h3>{{ fotosNaoTiradas }}</h3>
-            <p>Não Fotografadas</p>
-          </div>
-        </div>
-      </ion-card-content>
-    </ion-card>
-
-    <div class="lista-resumo">
-      <h3>Detalhes da Vistoria</h3>
-      
-      <ion-list>
-        <ion-item *ngFor="let item of resumoVistoria" [class.fotografada]="item.fotografada">
-          <ion-icon 
-            [name]="item.fotografada ? 'checkmark-circle' : 'close-circle'" 
-            [color]="item.fotografada ? 'success' : 'danger'"
-            slot="start">
-          </ion-icon>
-          <ion-label>
-            <h2>{{ item.armadilha.nome }}</h2>
-            <p *ngIf="item.armadilha.observacoes">{{ item.armadilha.observacoes }}</p>
-          </ion-label>
-          <ion-badge [color]="item.fotografada ? 'success' : 'danger'" slot="end">
-            {{ item.fotografada ? 'Fotografada' : 'Pulada' }}
-          </ion-badge>
-        </ion-item>
-      </ion-list>
+        </ion-card-content>
+      </ion-card>
+      <div class="lista-resumo">
+        <h3>Detalhes da Vistoria</h3>
+        <ion-list>
+          @for (item of resumoVistoria; track item) {
+            <ion-item [class.fotografada]="item.fotografada">
+              <ion-icon
+                [name]="item.fotografada ? 'checkmark-circle' : 'close-circle'"
+                [color]="item.fotografada ? 'success' : 'danger'"
+                slot="start">
+              </ion-icon>
+              <ion-label>
+                <h2>{{ item.armadilha.nome }}</h2>
+                @if (item.armadilha.observacoes) {
+                  <p>{{ item.armadilha.observacoes }}</p>
+                }
+              </ion-label>
+              <ion-badge [color]="item.fotografada ? 'success' : 'danger'" slot="end">
+                {{ item.fotografada ? 'Fotografada' : 'Pulada' }}
+              </ion-badge>
+            </ion-item>
+          }
+        </ion-list>
+      </div>
+      <div class="final-actions">
+        <ion-button
+          expand="block"
+          color="success"
+          size="large"
+          (click)="finalizarVistoria()">
+          <ion-icon name="checkmark" slot="start"></ion-icon>
+          Finalizar
+        </ion-button>
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="primary"
+          (click)="refazerVistoria()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Refazer Vistoria
+        </ion-button>
+      </div>
     </div>
-
-    <div class="final-actions">
-      <ion-button 
-        expand="block" 
-        color="success" 
-        size="large"
-        (click)="finalizarVistoria()">
-        <ion-icon name="checkmark" slot="start"></ion-icon>
-        Finalizar
-      </ion-button>
-
-      <ion-button 
-        expand="block" 
-        fill="outline" 
-        color="primary"
-        (click)="refazerVistoria()">
-        <ion-icon name="refresh" slot="start"></ion-icon>
-        Refazer Vistoria
-      </ion-button>
-    </div>
-  </div>
+  }
 </ion-content>
-  `,
+`,
   styles: [`
 .vistoria-content { --background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
 .progress-section { padding: 20px; background: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
