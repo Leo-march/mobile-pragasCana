@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # Dependências npm (Angular, Ionic, Capacitor)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Dependências Gradle (Android)
+  - package-ecosystem: "gradle"
+    directory: "/android"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
